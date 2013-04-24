@@ -1,0 +1,2 @@
+#!/bin/bash
+java -cp server/netty-all-4.0.0.CR1.jar:server HttpStaticFileServer

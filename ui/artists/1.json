@@ -1,0 +1,8 @@
+{
+    "person": {
+        "id": 1,
+        "spins": 1000,
+        "first_name": "Jack",
+        "last_name": "White"
+    }
+}

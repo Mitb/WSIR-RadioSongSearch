@@ -1,0 +1,52 @@
+{
+    "search_results": [ 
+        {
+        "hits": 6,
+        "item_ids": [1, 2, 3, 4, 5, 6]
+        }
+     ],
+    "search_result_items": [
+        {
+            "id": 1,
+            "score": 100,
+            "name": "Britney Spears",
+            "type": "artist",
+            "type_id": 1
+        },
+        {
+            "id": 2,
+            "score": 80,
+            "name": "Justin Bieber",
+            "type": "artist",
+            "type_id": 2
+        }, 
+        {
+            "id": 3,
+            "score": 70,
+            "name": "Backstreet Boys",
+            "type": "band",
+            "type_id": 2
+        },
+        {
+            "id": 4,
+            "score": 60,
+            "name": "N'sync",
+            "type": "band",
+            "type_id": 1
+        },
+        {
+            "id": 5,
+            "score": 40,
+            "name": "Backstreet Boys- Everybody",
+            "type": "track",
+            "type_id": 1
+        },
+        {
+            "id": 6,
+            "score": 30,
+            "name": "The White Stripes - Seven Nation Army",
+            "type": "track",
+            "type_id": 2
+        }     
+    ] 
+}
