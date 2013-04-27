@@ -1,3 +1,22 @@
+DS.RESTAdapter.registerTransform('emberobj', {
+    deserialize: function(serialized) {
+        return Ember.Object.create(serialized);
+    },  
+    serialize: function(deserialized) {
+        return deserialized.getProperties();
+    }   
+});
+
+DS.RESTAdapter.registerTransform('emberarr', {
+    deserialize: function(serialized) {
+       return serialized;
+    },  
+    serialize: function(deserialized) {
+        return deserialized;
+    }   
+});
+
+
 App.Store = DS.Store.extend({
     revision: 12,
     adapter: DS.RESTAdapter.create({
@@ -34,6 +53,12 @@ App.ArtistDetail = DS.Model.extend({
   spins: DS.attr('number'),
   firstName: DS.attr('string'),
   lastName: DS.attr('string'),
+  wikiUrl: DS.attr('string'), 
+  twitterUrl: DS.attr('string'),
+  songs: DS.attr('emberarr'),
+  bands: DS.attr('emberarr'),
+  spinsByStationDonut: DS.attr('emberobj'),
+  spinsOverTimeArea: DS.attr('emberobj')
 });
 
 App.BandDetail = DS.Model.extend({
@@ -57,5 +82,6 @@ App.Band = DS.Model.extend({
   name: DS.attr('string'),
   lastName: DS.attr('string'),
 });
+
 
 

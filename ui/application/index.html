@@ -36,10 +36,8 @@
       </div>
   </div>
   <div class="container search-area">
-      <div class="row">
-          <div class="span6 offset3">
+      <div class="row" style="margin-left: -7">
           {{view App.SearchFormView}}
-      </div>
       </div>
   </div>
 
@@ -52,15 +50,15 @@
   </script>
 
   <script type="text/x-handlebars" data-template-name="index">
-  <!-- empty -->
+  <!-- empty --><div styple="min-height:500px; top: 0; botom:0"></div>
   </script>
   
   <script type="text/x-handlebars" data-template-name="searchForm">
   <form class="form-search">
-    <div class="input-append">
-      <input id="searchbar" type="text" placeholder="Type artist or title" class="input-xlarge search-query">
+    <div class="input-append offset4">
+      <input id="searchbar" type="text" placeholder="Type artist or title" class="span3 search-query">
       <button type="submit" class="btn">Search</button>
-      </div>
+    </div>
   </form>
   </script>
  
@@ -114,8 +112,8 @@
        <div class="moreinfo-container" style="width:50%">
          <div class="caption" style="margin-bottom:15px">Find more Info on</div>
          <div class="well" style="padding:5px">
-         <div style="margin-bottom:5px"><a href="#"><img src="img/wikipedia_icon.png" class="img-rounded"></a></div>
-         <div><a href="#"><img src="img/twitter_icon.jpeg" class="img-rounded"></a></div>
+         <div style="margin-bottom:5px"><a {{bindAttr href="wikiUrl"}} target="_blank"><img src="img/wikipedia_icon.png" class="img-rounded"></a></div>
+         <div><a {{bindAttr href="twitterUrl"}} target="_blank"><img src="img/twitter_icon.jpeg" class="img-rounded"></a></div>
          </div>
        </div>
        <div style="clear:both"></div>
@@ -123,33 +121,25 @@
          <div class="caption">Spins over time</div>
          <div id="spins-over-time"></div>
        </div>
+       <div class="bands-container">
+         <div class="caption">Bands</div>
+         <table class="table table-striped songs-table">
+         {{#each bands}}
+            <tr>
+              <td>{{name}}</td>
+           </tr>
+          {{/each}}
+         </table>
+       </div>
        <div class="songs-container">
          <div class="caption">Songs</div>
          <table class="table table-striped songs-table">
-           <tr>
-                  <td>Love Is Blindness</td>
-                  <td>2012</td>
+         {{#each songs}}
+            <tr>
+              <td>{{title}}</td>
+              <td>{{year}}</td>
            </tr>
-           <tr>
-                  <td>Love Interruption</td>
-                 <td>2012</td>
-           </tr>
-           <tr>
-                  <td>Song X</td>
-                  <td>2012</td>
-           </tr>
-           <tr>
-                  <td>Song 4545</td>
-                 <td>2012</td>
-           </tr>
-           <tr>
-                  <td>Song1323</td>
-                 <td>2012</td>
-           </tr>
-           <tr>
-                  <td>Song xsf</td>
-                  <td>2012</td>
-           </tr>
+          {{/each}}
          </table>
        </div>
      </div>
