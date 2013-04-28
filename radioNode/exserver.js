@@ -64,14 +64,15 @@ app.get('/artist_details/:artistId', function(req, res){
 app.get('/search_results', function(req, res){
 	var urlParts = url.parse(req.url, true);
 	var queryParams = urlParts.query;
-  console.log('Query ');
   var query = queryParams.query;
   console.log('Query: "' + query + '" has been received');
   var options = {
     host: 'localhost',
     port: '8983',
-    path: '/solr/Radio/select?q=' + query + '&defType=edismax&qf=title^10.0+artist^10.0&wt=json&indent=true'
+    path: '/solr/Radio/select?q=' + query.replace(" ", "%20OR%20") + '&defType=edismax&qf=title^10.0+artist^10.0&wt=json&indent=true'
   };
+
+  console.log('Solr-Path ' + options.path );
   
   var callback = function(solrResponse) {
     var solrData = '';
@@ -95,10 +96,12 @@ app.get('/search_results', function(req, res){
              type_id: doc.id
            }
        });
+       console.log('Number of Results: ' + solrJson.response.numFound);
        res.send(uiJson)
     });
   }
   http.request(options, callback).end();
+
 });
 
 
