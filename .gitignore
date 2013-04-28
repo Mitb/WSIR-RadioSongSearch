@@ -9,5 +9,6 @@
 # solr stuff
 radioSolr/contrib/
 radioSolr/dist/
+radioSolr/Radio/Radio/solr/Radio/data/
 
 !radioSolr/Radio/**/*.war
