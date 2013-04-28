@@ -1,0 +1,2 @@
+#!/bin/sh
+java -Dsolr.solr.home=Radio/solr -jar start.jar
