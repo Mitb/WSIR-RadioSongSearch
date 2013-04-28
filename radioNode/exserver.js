@@ -105,4 +105,15 @@ app.get('/search_results', function(req, res){
 });
 
 
+app.get('/track_details/:trackId', function(req, res){
+  console.log("Our Track ID is "+req.params.trackId);
+  res.send({
+    track_detail: {
+      id: 1,
+      spins: 10000,
+      name: 'Smells like a teen spirit'    
+    }
+  });
+});
+
 app.listen(8889);
