@@ -2,8 +2,9 @@ var http = require('http');
 var express = require('express');
 var _ = require('underscore');
 var url = require('url');
-var app = express();
+var ask = require ('./answer_builder');
 
+var app = express();
 app.use(express.static(__dirname + '/application'));
 
 app.get('/', function(req, res){
@@ -13,6 +14,8 @@ app.get('/', function(req, res){
 
 app.get('/artist_details/:artistId', function(req, res){
 	console.log("Our Artist ID is "+req.params.artistId);
+  console.log("Number of Spins: "+ask.getNumberOfSpinsForArtist(req.params.artistId));
+
   res.send({
     "artist_detail": {
         "id": 1,

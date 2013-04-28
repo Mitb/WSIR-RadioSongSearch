@@ -28,4 +28,15 @@ function getNumberOfSpins(request, response){
 };
 
 
+function getNumberOfSpinsForArtist(artistId){
+	connection.query('Select count(Radio.station_id) AS number FROM Radio LEFT JOIN Songs on Radio.song_id = Songs.id WHERE Songs.artist = "'+artistId+'"', function(err, rows, fields) {
+	  		if (err) throw err;
+
+  		console.log("Number of Spins of Artist " + artistId + " is " + rows[0].number);
+		}
+	)
+};
+
+
+exports.getNumberOfSpinsForArtist = getNumberOfSpinsForArtist;
 exports.getNumberOfSpins = getNumberOfSpins;
