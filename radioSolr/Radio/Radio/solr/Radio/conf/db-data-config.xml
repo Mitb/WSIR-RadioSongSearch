@@ -1,0 +1,18 @@
+<dataConfig>
+
+  <dataSource type="JdbcDataSource" 
+              driver="com.mysql.jdbc.Driver"
+              convertType="true"
+              url="jdbc:mysql://localhost/Radio" 
+              user="root" 
+              password=""/>
+    <document>
+        <entity name="song" query="select id,title,artist from Songs">
+            <field column="ID" name="id" />
+            <field column="TITLE" name="title" />
+            <field column="ARTIST" name="artist" />
+            <field column="ALIAS" name="alias" />           
+        </entity>
+    </document>
+</dataConfig>
+

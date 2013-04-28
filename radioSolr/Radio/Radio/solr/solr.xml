@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<solr persistent="true" sharedLib="lib">
+  <cores adminPath="/admin/cores">
+    <core loadOnStartup="true" instanceDir="Radio/" transient="false" name="Radio"/>
+  </cores>
+</solr>
