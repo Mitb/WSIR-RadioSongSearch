@@ -1,6 +1,7 @@
 var http = require('http');
 var express = require('express');
 var _ = require('underscore');
+var url = require('url');
 var app = express();
 
 app.use(express.static(__dirname + '/application'));
@@ -61,92 +62,41 @@ app.get('/artist_details/:artistId', function(req, res){
 
 
 app.get('/search_results', function(req, res){
+	var urlParts = url.parse(req.url, true);
+	var queryParams = urlParts.query;
   console.log('Query has been received');
-  //req.params.query
+  var query = queryParams.query;
+  console.log('Query:' + query);
   var options = {
     host: 'localhost',
     port: '8983',
-    path: '/solr/Radio/select?q=Love&defType=edismax&qf=title^10.0+artist^10.0&wt=json&indent=true'
+    path: '/solr/Radio/select?q=' + query + '&defType=edismax&qf=title^10.0+artist^10.0&wt=json&indent=true'
   };
   
   var callback = function(solrResponse) {
     var solrData = '';
-    solrResponse.on('data', function (chunk) {
+    solrResponse.on('data', function(chunk) {
       solrData += chunk;
     });
-    solrResponse.on('end', function () {
+    solrResponse.on('end', function() {
       var solrJson = JSON.parse(solrData);
       var uiJson = {};
-      var results = uiJson.search_results = {};
-      console.log(solrJson);
-      results.hits = solrJson.response.numFound;
-      results.item_ids = [1, 2, 3, 4, 5, 6,7,8,9,10];
+      var result = {};
+      result.hits = solrJson.response.numFound;
+      result.item_ids = [1, 2, 3, 4, 5, 6,7,8,9,10];
+      uiJson.search_results = [result];
       var counter = 1;
-      uiJson.search_result_items = _.map(solrJson.response.docs, function(doc){ 
-           {
-             id: counter++;
-             score: 100;
-             name: doc.artist + ' - ' + doc.title;
-             type: 'track';
+      uiJson.search_result_items =  _.map(solrJson.response.docs, function(doc){ 
+          return {
+             id: counter++,
+             score: 100,
+             name: doc.artist + ' - ' + doc.title,
+             type: 'track',
              type_id: doc.id
            }
        });
-      res.send(uiJson)
+       res.send(uiJson)
     });
-  // 
-  //   
-  //   res.send({
-  //     "search_results": [ 
-  //         {
-  //         "hits": 6,
-  //         "item_ids": [1, 2, 3, 4, 5, 6]
-  //         }
-  //      ],
-  //     "search_result_items": [
-  //         {
-  //             "id": 1,
-  //             "score": 100,
-  //             "name": "Jack White",
-  //             "type": "artist",
-  //             "type_id": 1
-  //         },
-  //         {
-  //             "id": 2,
-  //             "score": 80,
-  //             "name": "Jack Black",
-  //             "type": "artist",
-  //             "type_id": 2
-  //         }, 
-  //         {
-  //             "id": 3,
-  //             "score": 70,
-  //             "name": "Nirvana",
-  //             "type": "band",
-  //             "type_id": 2
-  //         },
-  //         {
-  //             "id": 4,
-  //             "score": 60,
-  //             "name": "The White Stripes",
-  //             "type": "band",
-  //             "type_id": 1
-  //         },
-  //         {
-  //             "id": 5,
-  //             "score": 40,
-  //             "name": "Nirvana - Smells Like a Teen Spirit",
-  //             "type": "track",
-  //             "type_id": 1
-  //         },
-  //         {
-  //             "id": 6,
-  //             "score": 30,
-  //             "name": "The White Stripes - Seven Nation Army",
-  //             "type": "track",
-  //             "type_id": 2
-  //         }     
-  //     ] 
-  // });
   }
   http.request(options, callback).end();
 });
