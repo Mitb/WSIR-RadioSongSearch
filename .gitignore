@@ -6,3 +6,7 @@
 *.class
 !ui/server/*.class
 
+# solr stuff
+radioSolr/contrib/
+radioSolr/dist/
+
