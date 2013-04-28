@@ -10,4 +10,4 @@
 radioSolr/contrib/
 radioSolr/dist/
 
-!radioSolr/Radio/*.war
+!radioSolr/Radio/**/*.war
