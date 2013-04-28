@@ -64,9 +64,9 @@ app.get('/artist_details/:artistId', function(req, res){
 app.get('/search_results', function(req, res){
 	var urlParts = url.parse(req.url, true);
 	var queryParams = urlParts.query;
-  console.log('Query has been received');
+  console.log('Query ');
   var query = queryParams.query;
-  console.log('Query:' + query);
+  console.log('Query: "' + query + '" has been received');
   var options = {
     host: 'localhost',
     port: '8983',
@@ -75,10 +75,10 @@ app.get('/search_results', function(req, res){
   
   var callback = function(solrResponse) {
     var solrData = '';
-    solrResponse.on('data', function(chunk) {
+    solrResponse.on('data', function (chunk) {
       solrData += chunk;
     });
-    solrResponse.on('end', function() {
+    solrResponse.on('end', function () {
       var solrJson = JSON.parse(solrData);
       var uiJson = {};
       var result = {};
