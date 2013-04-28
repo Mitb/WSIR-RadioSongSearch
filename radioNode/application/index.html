@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Ember Starter Kit</title>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/bootstrap-responsive.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/font-awesome.css">
+  <link rel="stylesheet" href="css/morris.css">
+</head>
+<body>
+
+  <script type="text/x-handlebars">
+  <div class="back">
+   <img src="img/back.jpg" alt=""/>
+  </div>
+  <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+          <div class="container">
+              <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="brand" href="#">Radio Search</a>
+              <div class="nav-collapse collapse">
+                  <ul class="nav">
+                      <li><a href="#about">About</a></li>
+                      <li><a href="#admin">Admin</a></li>
+                  </ul>
+              </div>   <!--/.nav-collapse -->
+          </div>
+      </div>
+  </div>
+  <div class="container search-area">
+      <div class="row" style="margin-left: -7">
+          {{view App.SearchFormView}}
+      </div>
+  </div>
+
+   <div class="container content">
+       {{outlet}}
+  </div>
+  <footer class="footer">   
+          <p>Designed and built <a href="http://www.uni-mannheim.de/">@Unviersity of Mannheim</a></p>
+  </footer>
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="index">
+  <!-- empty --><div styple="min-height:500px; top: 0; botom:0"></div>
+  </script>
+  
+  <script type="text/x-handlebars" data-template-name="searchForm">
+  <form class="form-search">
+    <div class="input-append offset4">
+      <input id="searchbar" type="text" placeholder="Type artist or title" class="span3 search-query">
+      <button type="submit" class="btn">Search</button>
+    </div>
+  </form>
+  </script>
+ 
+  
+  <script type="text/x-handlebars" data-template-name="searchResults">
+     <div class="container-fluid">
+       <div class="row-fluid">
+         <div class="span5 offset1">
+            {{outlet results}}
+         </div>
+         <div class="span6">
+             {{outlet details}}
+         </div>
+       </div>
+     </div>
+  </script>
+  
+  <script type="text/x-handlebars" data-template-name="resultsList">
+    {{#with result.firstObject}}
+         <div class="result-stats">Returned {{hits}} results</div>
+         {{each items itemViewClass="App.SearchResultItemView" itemController="searchResultItem"}}
+    {{/with}}
+  </script>
+  
+  
+  <script type="text/x-handlebars" data-template-name="searchResultItem">
+      <div class="result-item">
+         {{#if view.selected}} <i class="icon-double-angle-right icon-2x"></i> {{/if}}
+          <a href="#"><strong>{{name}}</strong></a>
+          <span class="result-type">{{type}}</span>
+          <p class="result-snippet">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nunc justo,
+            vestibulum nec egestas quis, luctus eu elit. 
+          </p>
+      </div>
+  </script>
+  
+  <script type="text/x-handlebars" data-template-name="artistDetails">
+     <div class="details">
+     <div class="header">
+       <div class="top">
+         <span class="entity-name">{{firstName}} {{lastName}}</span>
+         <span class= "entity-totalspins">in total <span class="spins">{{spins}}</span> spins<span>
+       </div>
+       <div class="entity-type">Artist</div>
+     </div>
+       <div class="graph-container" style="float:right">
+         <div class="caption">Spins by Station</div>
+         <div id="spins-by-station-donut"></div>
+       </div>
+       <div class="moreinfo-container" style="width:50%">
+         <div class="caption" style="margin-bottom:15px">Find more Info on</div>
+         <div class="well" style="padding:5px">
+         <div style="margin-bottom:5px"><a {{bindAttr href="wikiUrl"}} target="_blank"><img src="img/wikipedia_icon.png" class="img-rounded"></a></div>
+         <div><a {{bindAttr href="twitterUrl"}} target="_blank"><img src="img/twitter_icon.jpeg" class="img-rounded"></a></div>
+         </div>
+       </div>
+       <div style="clear:both"></div>
+       <div class="graph-container">
+         <div class="caption">Spins over time</div>
+         <div id="spins-over-time"></div>
+       </div>
+       <div class="bands-container">
+         <div class="caption">Bands</div>
+         <table class="table table-striped songs-table">
+         {{#each bands}}
+            <tr>
+              <td>{{name}}</td>
+           </tr>
+          {{/each}}
+         </table>
+       </div>
+       <div class="songs-container">
+         <div class="caption">Songs</div>
+         <table class="table table-striped songs-table">
+         {{#each songs}}
+            <tr>
+              <td>{{title}}</td>
+              <td>{{year}}</td>
+           </tr>
+          {{/each}}
+         </table>
+       </div>
+     </div>
+  </script>
+  
+  <script type="text/x-handlebars" data-template-name="bandDetails">
+    <div class="details">
+      <p>hoho this is a band<p>
+       <p>{{name}}, {{spins}}<p>
+       <div id="myfirstchart" style="height: 250px;"></div>
+    </div>
+  </script>
+  
+  <script type="text/x-handlebars" data-template-name="trackDetails">
+    <div class="details">
+      <p>hoho this is a track<p>
+       <p>{{name}}, {{spins}}<p>
+       <div id="myfirstchart" style="height: 250px;"></div>
+    </div>
+  </script>
+
+  <script src="js/libs/jquery-1.9.1.js"></script>
+  <script src="js/libs/raphael.js"></script>
+  <script src="js/libs/handlebars-1.0.0-rc.3.js"></script>
+  <script src="js/libs/ember-1.0.0-rc.3.js"></script>
+  <script src="js/libs/ember-data.js"></script>
+  <script src="js/libs/bootstrap.js"></script>
+  <script src="js/libs/morris.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/app_models.js"></script>
+  
+</body>
+</html>

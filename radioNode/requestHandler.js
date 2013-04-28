@@ -13,5 +13,17 @@ function getStationNumber(request, response) {
 	response.end();
 }
 
+function index(request, response) {
+	console.log("Page loaded");
+
+	response.writeHead(200, {"Content-Type": "text/html"});
+	var page = "<object type='text/html' data='application/index.html'></object>";
+	response.write("Hello Index"+page);
+	response.end();
+
+}
+
+
+exports.index = index;
 exports.getSpinNumber = getSpinNumber;
 exports.getStationNumber = getStationNumber;
