@@ -2,15 +2,59 @@ var http = require('http');
 var express = require('express');
 var _ = require('underscore');
 var url = require('url');
+var async = require('async');
 var ask = require ('./answer_builder');
 
 var app = express();
 app.use(express.static(__dirname + '/application'));
 
-app.get('/', function(req, res){
+app.get('/search_results', function(req, res){
+	var urlParts = url.parse(req.url, true);
+	var queryParams = urlParts.query;
+  var query = queryParams.query;
+  console.log('Query: "' + query + '" has been received');
+  var options = {
+    host: 'localhost',
+    port: '8983',
+    path: '/solr/Radio/select?q=' + query.replace(" ", "%20OR%20") + '&defType=edismax&qf=title^10.0+artist^10.0&wt=json&indent=true'
+  };
 
-  res.send('hello world');
+  console.log('Solr-Path ' + options.path );
+  
+  var callback = function(solrResponse) {
+    var solrData = '';
+    solrResponse.on('data', function (chunk) {
+      solrData += chunk;
+    });
+    solrResponse.on('end', function () {
+      var solrJson = JSON.parse(solrData);
+      var uiJson = {};
+      var result = {};
+      result.hits = solrJson.response.numFound;
+      result.item_ids = [];
+      uiJson.search_results = [result];
+      var counter = 0;
+      uiJson.search_result_items =  _.map(solrJson.response.docs, function(doc){ 
+          counter++;
+          result.item_ids.push(counter);
+          return {
+             id: counter,
+             score: 100,
+             name: doc.artist + ' - ' + doc.title,
+             type: 'song',
+             type_id: doc.id,
+             snippet: "Horem ipsum dolor sit amet, consectetur adipiscing elit. Proin nunc justo, vestibulum nec egestas quis, luctus eu elit."
+           }
+       });
+       console.log('Number of Results: ' + solrJson.response.numFound);
+       res.send(uiJson)
+    });
+  }
+  http.request(options, callback).end();
+
 });
+
+
 
 app.get('/artist_details/:artistId', function(req, res){
 	console.log("Our Artist ID is "+req.params.artistId);
@@ -64,58 +108,40 @@ app.get('/artist_details/:artistId', function(req, res){
 });
 
 
-app.get('/search_results', function(req, res){
-	var urlParts = url.parse(req.url, true);
-	var queryParams = urlParts.query;
-  var query = queryParams.query;
-  console.log('Query: "' + query + '" has been received');
-  var options = {
-    host: 'localhost',
-    port: '8983',
-    path: '/solr/Radio/select?q=' + query.replace(" ", "%20OR%20") + '&defType=edismax&qf=title^10.0+artist^10.0&wt=json&indent=true'
-  };
 
-  console.log('Solr-Path ' + options.path );
-  
-  var callback = function(solrResponse) {
-    var solrData = '';
-    solrResponse.on('data', function (chunk) {
-      solrData += chunk;
-    });
-    solrResponse.on('end', function () {
-      var solrJson = JSON.parse(solrData);
-      var uiJson = {};
-      var result = {};
-      result.hits = solrJson.response.numFound;
-      result.item_ids = [1, 2, 3, 4, 5, 6,7,8,9,10];
-      uiJson.search_results = [result];
-      var counter = 1;
-      uiJson.search_result_items =  _.map(solrJson.response.docs, function(doc){ 
-          return {
-             id: counter++,
-             score: 100,
-             name: doc.artist + ' - ' + doc.title,
-             type: 'track',
-             type_id: doc.id
-           }
-       });
-       console.log('Number of Results: ' + solrJson.response.numFound);
-       res.send(uiJson)
-    });
-  }
-  http.request(options, callback).end();
-
-});
-
-
-app.get('/track_details/:trackId', function(req, res){
-  console.log("Our Track ID is "+req.params.trackId);
-  res.send({
-    track_detail: {
-      id: 1,
-      spins: 10000,
-      name: 'Smells like a teen spirit'    
-    }
+app.get('/song_details/:songId', function(req, res){
+  var id = req.params.songId;
+  console.log("Details requested for Song ID: "+ id);
+  async.parallel({
+      attr: function(callback){
+          ask.getSong(callback, id);
+      },
+      spins: function(callback){
+          ask.getNumberOfSpinsForSong(callback, id);
+      },
+      spinsByStationDonut: function(callback){
+          ask.getSpinsByStationDonutForSong(callback, id);
+      },
+      spinsOverTimeArea: function(callback){
+          ask.getSpinsOverTimeArea(callback, id);
+      }
+  },
+  function(err, song) {
+      res.send({
+        song_detail: {
+          id: id,
+          spins: song.spins,
+          title: ''+song.attr.title,
+          artist: ''+song.attr.artist,
+          spins_by_station_donut: { data: song.spinsByStationDonut },
+          spins_over_time_area: {
+              xkey: song.spinsOverTimeArea.xkey,
+              ykeys: song.spinsOverTimeArea.ykeys,
+              labels: song.spinsOverTimeArea.labels,
+              data : song.spinsOverTimeArea.data
+          }
+        }
+      });
   });
 });
 

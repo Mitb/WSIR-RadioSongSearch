@@ -51,11 +51,17 @@ left: 0;
 
 .details .header {
     margin-bottom: 20px;
+    color: #999;
 }
 
 .details .entity-name {
     color: #000;
     font-size: 30px;
+}
+
+.details .song-name {
+    color: #000;
+    font-size: 20px;
 }
 
 .details .entity-totalspins {

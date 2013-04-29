@@ -70,7 +70,9 @@
             {{outlet results}}
          </div>
          <div class="span6">
+         <div class="details">
              {{outlet details}}
+         </div>
          </div>
        </div>
      </div>
@@ -90,14 +92,12 @@
           <a href="#"><strong>{{name}}</strong></a>
           <span class="result-type">{{type}}</span>
           <p class="result-snippet">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nunc justo,
-            vestibulum nec egestas quis, luctus eu elit. 
+            {{snippet}}
           </p>
       </div>
   </script>
   
   <script type="text/x-handlebars" data-template-name="artistDetails">
-     <div class="details">
      <div class="header">
        <div class="top">
          <span class="entity-name">{{firstName}} {{lastName}}</span>
@@ -112,8 +112,8 @@
        <div class="moreinfo-container" style="width:50%">
          <div class="caption" style="margin-bottom:15px">Find more Info on</div>
          <div class="well" style="padding:5px">
-         <div style="margin-bottom:5px"><a {{bindAttr href="wikiUrl"}} target="_blank"><img src="img/wikipedia_icon.png" class="img-rounded"></a></div>
-         <div><a {{bindAttr href="twitterUrl"}} target="_blank"><img src="img/twitter_icon.jpeg" class="img-rounded"></a></div>
+           <div style="margin-bottom:5px"><a {{bindAttr href="wikiUrl"}} target="_blank"><img src="img/wikipedia_icon.png" class="img-rounded"></a></div>
+           <div><a {{bindAttr href="twitterUrl"}} target="_blank"><img src="img/twitter_icon.jpeg" class="img-rounded"></a></div>
          </div>
        </div>
        <div style="clear:both"></div>
@@ -142,7 +142,25 @@
           {{/each}}
          </table>
        </div>
+  </script>
+  
+  <script type="text/x-handlebars" data-template-name="songDetails">
+    <div class="header">
+      <div class="top">
+        <span class="song-name">{{title}}</span>&nbsp;by&nbsp;<span class="song-name">{{artist}}<span>
+        <span class= "entity-totalspins">in total <span class="spins">{{spins}}</span> spins<span>
+      </div>
+      <div class="entity-type">Song</div>
+    </div>
+    <div class="graph-container" style="float:right">
+        <div class="caption">Spins by Station</div>
+        <div id="spins-by-station-donut"></div>
      </div>
+    <div style="clear:both"></div>
+    <div class="graph-container">
+      <div class="caption">Spins over time</div>
+      <div id="spins-over-time"></div>
+    </div>
   </script>
   
   <script type="text/x-handlebars" data-template-name="bandDetails">

@@ -62,8 +62,8 @@ App.SearchRoute = Ember.Route.extend({
                 case "band":
                 modelClass = App.BandDetail
                 break;
-                case "track": 
-                modelClass = App.TrackDetail
+                case "song": 
+                modelClass = App.SongDetail
                 break;
                 default: console.log("unknown type: " + model.type); 
             }
@@ -146,7 +146,7 @@ App.BandDetailController = Ember.ObjectController.extend({
 
 });
 
-App.TrackDetailController = Ember.ObjectController.extend({
+App.SongDetailController = Ember.ObjectController.extend({
 
 });
 
@@ -189,4 +189,49 @@ App.ArtistDetailView = Ember.View.extend({
             });
         }
     }.observes('controller.content.spinsOverTimeArea')
+});
+
+App.DetailView = Ember.View.extend({
+    didInsert: false,
+    
+    didInsertElement: function(){
+        this.set('didInsert', true)
+        this.renderSpinsByStationDonut();
+        this.renderSpinsOverTimeArea();
+    },
+    
+    renderSpinsByStationDonut: function() {
+        var donut = this.get('controller.content.spinsByStationDonut');
+        var didInsert = this.get('didInsert');
+        
+        if( didInsert && donut) {
+            Morris.Donut({
+                element: 'spins-by-station-donut',
+                caption: 'Spins by Station',
+                data: donut.get('data')
+            });
+        }
+    }.observes('controller.content.spinsByStationDonut'),
+    
+    renderSpinsOverTimeArea: function(){
+        var area = this.get('controller.content.spinsOverTimeArea');
+        var didInsert = this.get('didInsert');
+        
+        if( didInsert && area) {
+            Morris.Area({
+                element: 'spins-over-time',
+                data: area.get('data'),
+                xkey: area.get('xkey'),
+                ykeys: area.get('ykeys'),
+                labels: area.get('labels'),
+                pointSize: 2,
+                hideHover: 'auto'
+            });
+        }
+    }.observes('controller.content.spinsOverTimeArea')
+});
+
+
+App.SongDetailView = App.DetailView.extend({
+    templateName: 'songDetails'
 });

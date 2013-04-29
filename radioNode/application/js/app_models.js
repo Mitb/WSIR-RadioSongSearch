@@ -39,14 +39,17 @@ App.SearchResultItem = DS.Model.extend({
   name: DS.attr('string'),
   type: DS.attr('string'),
   typeId: DS.attr('number'),
+  snippet: DS.attr('string'),
   searchResult: DS.belongsTo('App.SearchResult')
-
 });
 
 
-App.TrackDetail = DS.Model.extend({
+App.SongDetail = DS.Model.extend({
   spins: DS.attr('number'),
-  name: DS.attr('string'),
+  title: DS.attr('string'),
+  artist: DS.attr('string'),
+  spinsByStationDonut: DS.attr('emberobj'),
+  spinsOverTimeArea: DS.attr('emberobj')
 });
 
 App.ArtistDetail = DS.Model.extend({
@@ -66,7 +69,7 @@ App.BandDetail = DS.Model.extend({
   name: DS.attr('string'),
 });
 
-App.Track = DS.Model.extend({
+App.Song = DS.Model.extend({
   spins: DS.attr('number'),
   name: DS.attr('string'),
 });
