@@ -275,10 +275,13 @@
    <field name="price"  type="sfloat" indexed="true" stored="true"/>
    -->
    
-   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
-   <field name="artist" type="string" indexed="true" stored="true"/>
-   <field name="title" type="string" indexed="true" stored="true" required="true" />
-   <field name="alias" type="text" indexed="true" stored="true"/>
+   <field name="uniqueId" type="string" indexed="true" stored="true" required="true"/>
+   <field name="type" type="string" indexed="true" stored="true"/>
+   <field name="typeId" type="string" indexed="true" stored="true" />
+   
+   <field name="primaryIdentifier" type="string" indexed="true" stored="true"/>
+   <field name="secondaryIdentifier" type="string" indexed="true" stored="true"/>
+   <field name="spins" type="sint" indexed="true" stored="true"/>
 
    <!-- "default" values can be specified for fields, indicating which
         value should be used if no value is specified when adding a document.
@@ -292,16 +295,16 @@
         Typically you might build the spellchecker of "catchall" type field
         containing all of the text in each document
      -->
-   <field name="word" type="string" indexed="true" stored="true"/>
+   <!--  <field name="word" type="string" indexed="true" stored="true"/> -->
 
    
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
-   <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
+   <!-- <field name="text" type="text" indexed="true" stored="false" multiValued="true"/> -->
 
    <!-- non-tokenized version of manufacturer to make it easier to sort or group
         results by manufacturer.  copied from "manu" via copyField -->
-   <field name="manu_exact" type="string" indexed="true" stored="false"/>
+   <!-- <field name="manu_exact" type="string" indexed="true" stored="false"/> -->
 
    <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
         will be used if the name matches any of the patterns.
@@ -310,7 +313,7 @@
         EXAMPLE:  name="*_i" will match any field ending in _i (like myid_i, z_i)
         Longer patterns will be matched first.  if equal size patterns
         both match, the first appearing in the schema will be used.  -->
-   <dynamicField name="*_i"  type="sint"    indexed="true"  stored="true"/>
+   <!-- <dynamicField name="*_i"  type="sint"    indexed="true"  stored="true"/>
    <dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/>
    <dynamicField name="*_l"  type="slong"   indexed="true"  stored="true"/>
    <dynamicField name="*_t"  type="text"    indexed="true"  stored="true"/>
@@ -319,7 +322,7 @@
    <dynamicField name="*_d"  type="sdouble" indexed="true"  stored="true"/>
    <dynamicField name="*_dt" type="date"    indexed="true"  stored="true"/>
 
-   <dynamicField name="random*" type="random" />
+   <dynamicField name="random*" type="random" /> -->
 
    <!-- uncomment the following to ignore any fields that don't already match an existing 
         field name or dynamic field, rather than reporting them as an error. 
@@ -332,10 +335,10 @@
  <!-- Field to use to determine and enforce document uniqueness. 
       Unless this field is marked with required="false", it will be a required field
    -->
- <uniqueKey>id</uniqueKey>
+ <uniqueKey>uniqueId</uniqueKey>
 
  <!-- field for the QueryParser to use when an explicit fieldname is absent -->
- <defaultSearchField>text</defaultSearchField>
+ <defaultSearchField>primaryIdentifier</defaultSearchField>
 
  <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
  <solrQueryParser defaultOperator="OR"/>

@@ -7,11 +7,27 @@
               user="root" 
               password=""/>
     <document>
-        <entity name="song" query="select id,title,artist from Songs">
-            <field column="ID" name="id" />
-            <field column="TITLE" name="title" />
-            <field column="ARTIST" name="artist" />
-            <field column="ALIAS" name="alias" />           
+        <entity name="song" rootEntity="true" transformer="TemplateTransformer"
+           query="SELECT id,title,artist,alias FROM Songs">
+            <field column="type" template="song"/>       
+            <field column="id" name="typeId"/>
+            <field column="uniqueId" template="${song.type}:${song.id}"/>
+
+            <field column="title" name="primaryIdentifier"/>
+            <field column="artist" name="secondaryIdentifier"/>
+            
+            <entity name="radio" query="select count(*) as spins from Radio where song_id='${song.id}'">
+              <field column="spins" name="spins"/>
+            </entity>
+        </entity>
+        
+        <entity name="artist" rootEntity="true" transformer="TemplateTransformer"
+           query="SELECT id,name FROM EN_Artist">
+          <field column="type" template="artist"/>    
+          <field column="id" name="typeId"/>
+          <field column="uniqueId" template="${artist.type}:${artist.id}"/>
+            
+          <field column="name" name="primaryIdentifier"/>      
         </entity>
     </document>
 </dataConfig>
