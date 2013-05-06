@@ -15,7 +15,7 @@
 
             <field column="title" name="primaryIdentifier"/>
             <field column="artist" name="secondaryIdentifier"/>
-            
+            <field column="identifierText" template="${song.title} ${song.artist}"/>
             <entity name="radio" query="select count(*) as spins from Radio where song_id='${song.id}'">
               <field column="spins" name="spins"/>
             </entity>
@@ -27,7 +27,8 @@
           <field column="id" name="typeId"/>
           <field column="uniqueId" template="${artist.type}:${artist.id}"/>
             
-          <field column="name" name="primaryIdentifier"/>      
+          <field column="name" name="primaryIdentifier"/>
+          <field column="identifierText" template="${artist.name}"/>
         </entity>
     </document>
 </dataConfig>

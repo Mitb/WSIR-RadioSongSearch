@@ -281,6 +281,9 @@
    
    <field name="primaryIdentifier" type="string" indexed="true" stored="true"/>
    <field name="secondaryIdentifier" type="string" indexed="true" stored="true"/>
+   <field name="primaryIdentifierText" type="text" indexed="true" stored="false"/>
+   <field name="secondaryIdentifierText" type="text" indexed="true" stored="false"/>
+   <field name="identifierText" type="text" indexed="true" stored="true"/>
    <field name="spins" type="sint" indexed="true" stored="true"/>
 
    <!-- "default" values can be specified for fields, indicating which
@@ -360,6 +363,9 @@
 
    <copyField source="manu" dest="manu_exact"/>
  -->
+    <copyField source="primaryIdentifier" dest="primaryIdentifierText"/>
+    <copyField source="secondaryIdentifier" dest="secondaryIdentifierText"/>
+    
 
  <!-- Similarity is the scoring routine for each document vs. a query.
       A custom similarity may be specified here, but the default is fine
