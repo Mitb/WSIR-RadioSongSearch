@@ -16,7 +16,9 @@ app.get('/search_results', function(req, res){
   var options = {
     host: 'localhost',
     port: '8983',
-    path: '/solr/Radio/select?q=' + query.replace(" ", "%20OR%20") + '&defType=edismax&qf=title^10.0+artist^10.0&wt=json&indent=true'
+    path: '/solr/Radio/select?q=' + query.replace(" ", "%20OR%20") + '&wt=json&defType=edismax&qf=primaryIdentifier%5E50+secondaryIdentifier%5E30+identifierText%5E10&mm=1%3C50%25+5%3C70%25&stopwords=true&lowercaseOperators=true'
+    
+      
   };
 
   console.log('Solr-Path ' + options.path );
@@ -37,12 +39,15 @@ app.get('/search_results', function(req, res){
       uiJson.search_result_items =  _.map(solrJson.response.docs, function(doc){ 
           counter++;
           result.item_ids.push(counter);
+          var name = ''
+          if(doc.secondaryIdentifier){ name = doc.primaryIdentifier + ' - ' + doc.secondaryIdentifier;
+          }else{ name = doc.primaryIdentifier; }
           return {
              id: counter,
              score: 100,
-             name: doc.artist + ' - ' + doc.title,
-             type: 'song',
-             type_id: doc.id,
+             name: name,
+             type: doc.type,
+             type_id: doc.typeId,
              snippet: "Horem ipsum dolor sit amet, consectetur adipiscing elit. Proin nunc justo, vestibulum nec egestas quis, luctus eu elit."
            }
        });
