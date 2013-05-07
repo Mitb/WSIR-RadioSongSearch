@@ -29,8 +29,9 @@ app.get('/search_results', function(req, res){
       solrData += chunk;
     });
     solrResponse.on('end', function () {
-      var solrJson = JSON.parse(solrData);
       var uiJson = {};
+      if(solrData){
+      var solrJson = solrData ? JSON.parse(solrData) : {};
       var result = {};
       result.hits = solrJson.response.numFound;
       result.item_ids = [];
@@ -52,6 +53,7 @@ app.get('/search_results', function(req, res){
            }
        });
        console.log('Number of Results: ' + solrJson.response.numFound);
+     }
        res.send(uiJson)
     });
   }
