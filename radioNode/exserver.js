@@ -71,13 +71,7 @@ app.get('/artist_details/:artistId', function(req, res){
           ask.getArtist(callback, id);
       },
       spins: function(callback){
-          ask.getNumberOfSpinsForArtist(callback, id);
-      },
-      spinsByStationDonut: function(callback){
-          ask.getSpinsByStationDonutForArtist(callback, id);
-      },
-      spinsOverTimeArea: function(callback){
-          ask.getSpinsOverTimeAreaForArtist(callback, id);
+          ask.getSpinsOverTimeForArtist(callback, id);
       },
       songs: function(callback){
           ask.getSongsOfArtist(callback, id);
@@ -90,23 +84,30 @@ app.get('/artist_details/:artistId', function(req, res){
       },     
   },
   function(err, artist) {
+      var attr = artist.attr || {};
+      var twitterUrl = attr.twiter_id ? 'https://twitter.com/' + attr.twiter_id : attr.twiter_id;
+      var facebookUrl = attr.facebook_id ? 'https://facebook.com/' + attr.facebook_id : attr.facebook_id;
+      var lastfmUrl = attr.lastfm_id ? 'http://www.last.fm/user/' + attr.lastfm_id : attr.lastfm_id;
+    
+      var spins = artist.spins || [];
+      var spinsOverTimeArea = ask.buildAreaOverTimeChartFrom(spins);
+      var spinsByStationDonut = ask.buildSpinsByStationDonutFrom(spins);
+    
       res.send({
         artist_detail: {
           id: id,
-          spins: artist.spins,
-          name: artist.attr.name,
-          wiki_url: artist.attr.wikipedia_en, 
-          twitter_url: 'https://twitter.com/' + artist.attr.twiter_id,
+          spins: spins.length,
+          name: attr.name,
+          homepage: attr.homepage,
+          wiki_url: attr.wikipedia_en, 
+          twitter_url: twitterUrl,
+          facebook_url: facebookUrl,
+          lastfm_url: lastfmUrl,
           songs: artist.songs,
           bands: artist.bands,
           members: artist.members,
-          spins_by_station_donut: { data: artist.spinsByStationDonut },
-          spins_over_time_area: {
-              xkey: artist.spinsOverTimeArea.xkey,
-              ykeys: artist.spinsOverTimeArea.ykeys,
-              labels: artist.spinsOverTimeArea.labels,
-              data : artist.spinsOverTimeArea.data
-          }
+          spins_by_station_donut: spinsByStationDonut,
+          spins_over_time_area: spinsOverTimeArea
         }
       });
   });
@@ -122,29 +123,23 @@ app.get('/song_details/:songId', function(req, res){
           ask.getSong(callback, id);
       },
       spins: function(callback){
-          ask.getNumberOfSpinsForSong(callback, id);
-      },
-      spinsByStationDonut: function(callback){
-          ask.getSpinsByStationDonutForSong(callback, id);
-      },
-      spinsOverTimeArea: function(callback){
-          ask.getSpinsOverTimeAreaForSong(callback, id);
+          ask.getSpinsOverTimeForSong(callback, id);
       }
   },
   function(err, song) {
-      res.send({
+    var attr = song.attr || {};
+    var spins = song.spins || [];
+    var spinsOverTimeArea = ask.buildAreaOverTimeChartFrom(spins);
+    var spinsByStationDonut = ask.buildSpinsByStationDonutFrom(spins);
+ 
+    res.send({
         song_detail: {
           id: id,
-          spins: song.spins,
-          title: ''+song.attr.title,
-          artist: ''+song.attr.artist_name,
-          spins_by_station_donut: { data: song.spinsByStationDonut },
-          spins_over_time_area: {
-              xkey: song.spinsOverTimeArea.xkey,
-              ykeys: song.spinsOverTimeArea.ykeys,
-              labels: song.spinsOverTimeArea.labels,
-              data : song.spinsOverTimeArea.data
-          }
+          spins: spins.length,
+          title: ''+attr.title,
+          artist: ''+attr.artist_name,
+          spins_by_station_donut: spinsByStationDonut,
+          spins_over_time_area: spinsOverTimeArea
         }
       });
   });

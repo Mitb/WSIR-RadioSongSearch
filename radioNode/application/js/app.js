@@ -25,11 +25,11 @@ App.SongRoute = Ember.Route.extend({
   model: function(params) {
      return App.SongDetail.find(params.id);
   },
-  setupController: function(controller, model) {
-    this.controllerFor('songDetail').set('content', model);
-  },
+  // setupController: function(controller, model) {
+ //    this.controllerFor('artistDetail').set('content', model);
+ //  },
   renderTemplate: function() {
-    this.render('songDetail');
+    this.render('songBig');
   },
   events: {
       search: function(query) {
@@ -187,10 +187,6 @@ App.ArtistDetailController = Ember.ObjectController.extend({
   
 });
 
-App.BandDetailController = Ember.ObjectController.extend({
-
-});
-
 App.SongDetailController = Ember.ObjectController.extend({
 
 });
@@ -278,5 +274,9 @@ App.DetailView = Ember.View.extend({
 
 
 App.SongDetailView = App.DetailView.extend({
+    templateName: 'songDetails'
+});
+
+App.SongBigView = App.DetailView.extend({
     templateName: 'songDetails'
 });
