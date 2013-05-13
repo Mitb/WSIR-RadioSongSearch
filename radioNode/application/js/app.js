@@ -23,10 +23,11 @@ App.IndexRoute = Ember.Route.extend({
 
 App.SongRoute = Ember.Route.extend({
   model: function(params) {
-     return App.SongDetail.find(params.id);
+     return params.id;
   },
-  setupController: function(controller, model) {
-     this.controllerFor('songDetail').set('content', model);
+  setupController: function(controller, modelId) {
+     var detailsModel = App.SongDetail.find(modelId)
+     this.controllerFor('songDetail').set('content', detailsModel);
   },
   renderTemplate: function() {
     this.render('songDetail');
@@ -44,10 +45,11 @@ App.SongRoute = Ember.Route.extend({
 
 App.ArtistRoute = Ember.Route.extend({
   model: function(params) {
-     return App.ArtistDetail.find(params.id);
+     return params.id;
   },
-  setupController: function(controller, model) {
-    this.controllerFor('artistDetail').set('content', model);
+  setupController: function(controller, modelId) {
+    var detailsModel = App.ArtistDetail.find(modelId);
+    this.controllerFor('artistDetail').set('content', detailsModel);
   },
   renderTemplate: function() {
     this.render('artistDetail');
@@ -87,8 +89,22 @@ App.SearchRoute = Ember.Route.extend({
             controller: controller
         });
     },
-    events: {
-        
+    
+    getDetailsModel: function(type, id){
+      var modelClass;
+      switch (type) {
+          case "artist": 
+          modelClass = App.ArtistDetail
+          break;
+          case "song": 
+          modelClass = App.SongDetail
+          break;
+          default: console.log("unknown type: " + model.type); 
+      }
+      return modelClass.find(id);
+    },
+    
+    events: {        
         search: function(query) {  
             var url = /(.*\/)(.*$)/.exec(document.URL);   
             history.pushState(null, null, url[1] + query);
@@ -98,24 +114,13 @@ App.SearchRoute = Ember.Route.extend({
         },
         
         showDetails: function(model) {
-            var modelClass;
-            var modelType = model.get('type');
-            switch (modelType) {
-                case "artist": 
-                modelClass = App.ArtistDetail
-                break;
-                case "band":
-                modelClass = App.BandDetail
-                break;
-                case "song": 
-                modelClass = App.SongDetail
-                break;
-                default: console.log("unknown type: " + model.type); 
-            }
-            var detailsModel = modelClass.find(model.get('typeId'));
-            var controller = this.controllerFor(modelType + 'Detail');
+            var type = model.get('type');
+            var id = model.get('typeId');
+            
+            var detailsModel = this.getDetailsModel(type, id);
+            var controller = this.controllerFor(type + 'Detail');
             controller.set('content', detailsModel);
-            this.render(modelType + 'Detail', {
+            this.render(type + 'Detail', {
                 into: 'searchResults',
                 outlet: 'details',
                 controller: controller
@@ -131,7 +136,7 @@ App.SearchFormView = Ember.View.extend({
         evt.preventDefault(); 
         var query = $('#searchbar').val();
         this.get('controller').send('search', query);
-    }
+    },
   
 });
 
@@ -155,7 +160,6 @@ App.SearchResultItemView = Ember.View.extend({
         App.SearchResultItemView.deselectAll();
         this.set('selected', true);
     }
-  
 });
 
 App.SearchResultItemView.reopenClass({
@@ -190,47 +194,6 @@ App.ArtistDetailController = Ember.ObjectController.extend({
 App.SongDetailController = Ember.ObjectController.extend({
 
 });
-
-// App.ArtistDetailView = Ember.View.extend({
-//     templateName: 'artistDetails',
-//     didInsert: false,
-//     
-//     didInsertElement: function(){
-//         this.set('didInsert', true)
-//         this.renderSpinsByStationDonut();
-//         this.renderSpinsOverTimeArea();
-//     },
-//     
-//     renderSpinsByStationDonut: function() {
-//         var donut = this.get('controller.content.spinsByStationDonut');
-//         var didInsert = this.get('didInsert');
-//         
-//         if( didInsert && donut) {
-//             Morris.Donut({
-//                 element: 'spins-by-station-donut',
-//                 caption: 'Spins by Station',
-//                 data: donut.get('data')
-//             });
-//         }
-//     }.observes('controller.content.spinsByStationDonut'),
-//     
-//     renderSpinsOverTimeArea: function(){
-//         var area = this.get('controller.content.spinsOverTimeArea');
-//         var didInsert = this.get('didInsert');
-//         
-//         if( didInsert && area) {
-//             Morris.Area({
-//                 element: 'spins-over-time',
-//                 data: area.get('data'),
-//                 xkey: area.get('xkey'),
-//                 ykeys: area.get('ykeys'),
-//                 labels: area.get('labels'),
-//                 pointSize: 2,
-//                 hideHover: 'auto'
-//             });
-//         }
-//     }.observes('controller.content.spinsOverTimeArea')
-// });
 
 App.DetailView = Ember.View.extend({
     didInsert: false,
