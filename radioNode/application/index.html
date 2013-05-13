@@ -70,9 +70,7 @@
             {{outlet results}}
          </div>
          <div class="span6">
-         <div class="details">
-             {{outlet details}}
-         </div>
+            {{outlet details}}
          </div>
        </div>
      </div>
@@ -103,6 +101,7 @@
   </script>
   
   <script type="text/x-handlebars" data-template-name="artistDetails">
+     <div class="details">
      <div class="header">
        <div class="top">
          <span class="entity-name">{{name}}</span>
@@ -117,20 +116,20 @@
        <div class="moreinfo-container" style="width:50%">
          <div class="caption" style="margin-bottom:15px">Find more Info on</div>
          <div class="well" style="padding:5px">
-           <div style="width:150px;height:75px; float:left;">
-             <a {{bindAttr href="homepageUrl"}} target="_blank">WEB</a>
-           </div>
-           <div style="margin-bottom:5px; margin-right:5px; float:left;">
-             <a {{bindAttr href="wikiUrl"}} target="_blank"><img src="img/wikipedia_icon.png" class="img-rounded"></a>
+           <div style="width:155px;height:70px;margin-right:9px;float:left;">
+             <a {{bindAttr href="homepageUrl"}} target="_blank" style="margin-left:auto;margin-right:auto;margin-top:auto;margin-bottom:auto;">homepage</a>
            </div>
            <div style="margin-bottom:5px;">
-             <a {{bindAttr href="twitterUrl"}} target="_blank"><img src="img/twitter_icon.jpeg" class="img-rounded"></a>
+             <a {{bindAttr href="wikiUrl"}} target="_blank"><img src="img/wikipedia_icon.png" class="img-rounded"/></a>
            </div>
-           <div style="margin-right: 5px; float:left;">
-             <a {{bindAttr href="facebookUrl"}} target="_blank"><img src="img/facebook_icon.jpg" class="img-rounded"></a>
+           <div style="margin-bottom:5px; margin-right:9px; float:left;">
+             <a {{bindAttr href="twitterUrl"}} target="_blank"><img src="img/twitter_icon.jpeg" class="img-rounded"/></a>
+           </div>
+           <div style="margin-right:5px; float:left;">
+             <a {{bindAttr href="facebookUrl"}} target="_blank"><img src="img/facebook_icon.jpg" class="img-rounded"/></a>
           </div>
           <div>
-             <a {{bindAttr href="lastfmUrl"}} target="_blank"><img src="img/lastfm_icon.jpg" class="img-rounded"></a>
+             <a {{bindAttr href="lastfmUrl"}} target="_blank"><img src="img/lastfm_icon.jpg" class="img-rounded"/></a>
           </div>
          </div>
        </div>
@@ -173,9 +172,11 @@
           {{/each}}
          </table>
        </div>
+       </div>
   </script>
   
   <script type="text/x-handlebars" data-template-name="songDetails">
+    <div class="details">
     <div class="header">
       <div class="top">
         <span class="song-name">{{title}}</span>
@@ -192,6 +193,7 @@
     <div class="graph-container">
       <div class="caption">Spins over time</div>
       <div id="spins-over-time"></div>
+    </div>
     </div>
   </script>
 

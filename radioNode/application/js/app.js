@@ -25,11 +25,11 @@ App.SongRoute = Ember.Route.extend({
   model: function(params) {
      return App.SongDetail.find(params.id);
   },
-  // setupController: function(controller, model) {
- //    this.controllerFor('artistDetail').set('content', model);
- //  },
+  setupController: function(controller, model) {
+     this.controllerFor('songDetail').set('content', model);
+  },
   renderTemplate: function() {
-    this.render('songBig');
+    this.render('songDetail');
   },
   events: {
       search: function(query) {
@@ -191,46 +191,46 @@ App.SongDetailController = Ember.ObjectController.extend({
 
 });
 
-App.ArtistDetailView = Ember.View.extend({
-    templateName: 'artistDetails',
-    didInsert: false,
-    
-    didInsertElement: function(){
-        this.set('didInsert', true)
-        this.renderSpinsByStationDonut();
-        this.renderSpinsOverTimeArea();
-    },
-    
-    renderSpinsByStationDonut: function() {
-        var donut = this.get('controller.content.spinsByStationDonut');
-        var didInsert = this.get('didInsert');
-        
-        if( didInsert && donut) {
-            Morris.Donut({
-                element: 'spins-by-station-donut',
-                caption: 'Spins by Station',
-                data: donut.get('data')
-            });
-        }
-    }.observes('controller.content.spinsByStationDonut'),
-    
-    renderSpinsOverTimeArea: function(){
-        var area = this.get('controller.content.spinsOverTimeArea');
-        var didInsert = this.get('didInsert');
-        
-        if( didInsert && area) {
-            Morris.Area({
-                element: 'spins-over-time',
-                data: area.get('data'),
-                xkey: area.get('xkey'),
-                ykeys: area.get('ykeys'),
-                labels: area.get('labels'),
-                pointSize: 2,
-                hideHover: 'auto'
-            });
-        }
-    }.observes('controller.content.spinsOverTimeArea')
-});
+// App.ArtistDetailView = Ember.View.extend({
+//     templateName: 'artistDetails',
+//     didInsert: false,
+//     
+//     didInsertElement: function(){
+//         this.set('didInsert', true)
+//         this.renderSpinsByStationDonut();
+//         this.renderSpinsOverTimeArea();
+//     },
+//     
+//     renderSpinsByStationDonut: function() {
+//         var donut = this.get('controller.content.spinsByStationDonut');
+//         var didInsert = this.get('didInsert');
+//         
+//         if( didInsert && donut) {
+//             Morris.Donut({
+//                 element: 'spins-by-station-donut',
+//                 caption: 'Spins by Station',
+//                 data: donut.get('data')
+//             });
+//         }
+//     }.observes('controller.content.spinsByStationDonut'),
+//     
+//     renderSpinsOverTimeArea: function(){
+//         var area = this.get('controller.content.spinsOverTimeArea');
+//         var didInsert = this.get('didInsert');
+//         
+//         if( didInsert && area) {
+//             Morris.Area({
+//                 element: 'spins-over-time',
+//                 data: area.get('data'),
+//                 xkey: area.get('xkey'),
+//                 ykeys: area.get('ykeys'),
+//                 labels: area.get('labels'),
+//                 pointSize: 2,
+//                 hideHover: 'auto'
+//             });
+//         }
+//     }.observes('controller.content.spinsOverTimeArea')
+// });
 
 App.DetailView = Ember.View.extend({
     didInsert: false,
@@ -277,6 +277,6 @@ App.SongDetailView = App.DetailView.extend({
     templateName: 'songDetails'
 });
 
-App.SongBigView = App.DetailView.extend({
-    templateName: 'songDetails'
-});
+App.ArtistDetailView = App.DetailView.extend({
+    templateName: 'artistDetails'
+});    
