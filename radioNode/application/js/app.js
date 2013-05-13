@@ -5,6 +5,8 @@ App = Ember.Application.create({
 
 App.Router.map(function() {
     this.route('search', { path: '/search/:query' });
+    this.route('song', { path: '/song/:id' });
+    this.route('artist', { path: '/artist/:id' });
 });
 
 App.IndexRoute = Ember.Route.extend({  
@@ -18,6 +20,49 @@ App.IndexRoute = Ember.Route.extend({
         }
     }
 });
+
+App.SongRoute = Ember.Route.extend({
+  model: function(params) {
+     return App.SongDetail.find(params.id);
+  },
+  setupController: function(controller, model) {
+    this.controllerFor('songDetail').set('content', model);
+  },
+  renderTemplate: function() {
+    this.render('songDetail');
+  },
+  events: {
+      search: function(query) {
+          this.transitionTo('search', query);
+          var res = App.SearchResult.find({query: query});
+          var controller = this.controllerFor('searchResult');
+          controller.set('content', {});
+          controller.set('result', res);
+      }
+  }
+});
+
+App.ArtistRoute = Ember.Route.extend({
+  model: function(params) {
+     return App.ArtistDetail.find(params.id);
+  },
+  setupController: function(controller, model) {
+    this.controllerFor('artistDetail').set('content', model);
+  },
+  renderTemplate: function() {
+    this.render('artistDetail');
+  },
+  events: {
+      search: function(query) {
+          this.transitionTo('search', query);
+          var res = App.SearchResult.find({query: query});
+          var controller = this.controllerFor('searchResult');
+          controller.set('content', {});
+          controller.set('result', res);
+      }
+  }
+});
+
 
 App.SearchRoute = Ember.Route.extend({
     
@@ -139,7 +184,7 @@ App.SearchResultItemController = Ember.ObjectController.extend({
 });
 
 App.ArtistDetailController = Ember.ObjectController.extend({
-
+  
 });
 
 App.BandDetailController = Ember.ObjectController.extend({

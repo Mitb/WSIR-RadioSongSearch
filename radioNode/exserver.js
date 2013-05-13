@@ -41,7 +41,7 @@ app.get('/search_results', function(req, res){
           counter++;
           result.item_ids.push(counter);
           var name = ''
-          if(doc.secondaryIdentifier){ name = doc.primaryIdentifier + ' - ' + doc.secondaryIdentifier;
+          if(doc.secondaryIdentifier && doc.secondaryIdentifier.trim() != ''){ name = doc.primaryIdentifier + ' - ' + doc.secondaryIdentifier;
           }else{ name = doc.primaryIdentifier; }
           return {
              id: counter,
@@ -64,54 +64,52 @@ app.get('/search_results', function(req, res){
 
 
 app.get('/artist_details/:artistId', function(req, res){
-	console.log("Our Artist ID is "+req.params.artistId);
-  console.log("Number of Spins: "+ask.getNumberOfSpinsForArtist(req.params.artistId));
-
-  res.send({
-    "artist_detail": {
-        "id": 1,
-        "spins": 1000,
-        "first_name": "Jack",
-        "last_name": "White",
-        "wiki_url": "http://en.wikipedia.org/wiki/Jack_White",
-        "twitter_url": "https://twitter.com/search?q=%23jackwhite",
-        "songs": [
-            {"title":"Love Is Blindness", "year":"2012"},
-            {"title":"Love Interruption", "year":"2013"},
-            {"title":"Sonx X", "year":"2012"},
-            {"title":"Song 3434", "year":"2012"},
-            {"title":"YSSD", "year":"2012"},
-            {"title":"Bla Blup", "year":"2012"}
-        ],
-        "bands": [
-            {"name": "The White Stripes"}
-        ],
-        "spins_by_station_donut": {
-            "data": [
-                {"label": "Das Ding", "value": 50},
-                {"label": "SWR3", "value": 100},
-                {"label": "BigFM", "value": 110}
-            ]
-        },
-        "spins_over_time_area": {
-            "xkey": "period",
-            "ykeys": ["ding", "swr3", "bigfm"],
-            "labels": ["Das Ding", "SWR3", "BigFM"],
-            "data": [
-                {"period": "2010 Q1", "ding": 2666, "swr3": null, "bigfm": 2647},
-                {"period": "2010 Q2", "ding": 2778, "swr3": 2294, "bigfm": 2441},
-                {"period": "2010 Q3", "ding": 4912, "swr3": 1969, "bigfm": 2501},
-                {"period": "2010 Q4", "ding": 3767, "swr3": 3597, "bigfm": 5689},
-                {"period": "2011 Q1", "ding": 6810, "swr3": 1914, "bigfm": 2293},
-                {"period": "2011 Q2", "ding": 5670, "swr3": 4293, "bigfm": 1881},
-                {"period": "2011 Q3", "ding": 4820, "swr3": 3795, "bigfm": 1588},
-                {"period": "2011 Q4", "ding": 15073, "swr3": 5967, "bigfm": 5175},
-                {"period": "2012 Q1", "ding": 10687, "swr3": 4460, "bigfm": 2028},
-                {"period": "2012 Q2", "ding": 8432, "swr3": 5713, "bigfm": 1791}
-            ]
+  var id = req.params.artistId;
+  console.log("Details requested for Artist ID: "+ id);
+  async.parallel({
+      attr: function(callback){
+          ask.getArtist(callback, id);
+      },
+      spins: function(callback){
+          ask.getNumberOfSpinsForArtist(callback, id);
+      },
+      spinsByStationDonut: function(callback){
+          ask.getSpinsByStationDonutForArtist(callback, id);
+      },
+      spinsOverTimeArea: function(callback){
+          ask.getSpinsOverTimeAreaForArtist(callback, id);
+      },
+      songs: function(callback){
+          ask.getSongsOfArtist(callback, id);
+      },
+      bands: function(callback){
+          ask.getBandsOfArtist(callback, id);
+      },
+      members: function(callback){
+          ask.getMembersOfArist(callback, id);
+      },     
+  },
+  function(err, artist) {
+      res.send({
+        artist_detail: {
+          id: id,
+          spins: artist.spins,
+          name: artist.attr.name,
+          wiki_url: artist.attr.wikipedia_en, 
+          twitter_url: 'https://twitter.com/' + artist.attr.twiter_id,
+          songs: artist.songs,
+          bands: artist.bands,
+          members: artist.members,
+          spins_by_station_donut: { data: artist.spinsByStationDonut },
+          spins_over_time_area: {
+              xkey: artist.spinsOverTimeArea.xkey,
+              ykeys: artist.spinsOverTimeArea.ykeys,
+              labels: artist.spinsOverTimeArea.labels,
+              data : artist.spinsOverTimeArea.data
+          }
         }
-    }
-});
+      });
+  });
 });
 
 
@@ -130,7 +128,7 @@ app.get('/song_details/:songId', function(req, res){
           ask.getSpinsByStationDonutForSong(callback, id);
       },
       spinsOverTimeArea: function(callback){
-          ask.getSpinsOverTimeArea(callback, id);
+          ask.getSpinsOverTimeAreaForSong(callback, id);
       }
   },
   function(err, song) {
@@ -139,7 +137,7 @@ app.get('/song_details/:songId', function(req, res){
           id: id,
           spins: song.spins,
           title: ''+song.attr.title,
-          artist: ''+song.attr.artist,
+          artist: ''+song.attr.artist_name,
           spins_by_station_donut: { data: song.spinsByStationDonut },
           spins_over_time_area: {
               xkey: song.spinsOverTimeArea.xkey,

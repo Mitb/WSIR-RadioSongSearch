@@ -27,6 +27,10 @@ App.Store = DS.Store.extend({
     }})
 });
 
+DS.RESTAdapter.map('App.SongDetail', {
+  primaryKey: '_id'
+});
+
 
 App.SearchResult = DS.Model.extend({
   hits: DS.attr('number'),
@@ -38,9 +42,15 @@ App.SearchResultItem = DS.Model.extend({
   score: DS.attr('number'),
   name: DS.attr('string'),
   type: DS.attr('string'),
-  typeId: DS.attr('number'),
+  typeId: DS.attr('string'),
   snippet: DS.attr('string'),
-  searchResult: DS.belongsTo('App.SearchResult')
+  searchResult: DS.belongsTo('App.SearchResult'),
+  isArtist: function(){
+    return this.get('type') == 'artist';
+  }.property('type'),
+  isSong: function(){
+    return this.get('type') == 'song';
+  }.property('type'),
 });
 
 
@@ -54,14 +64,30 @@ App.SongDetail = DS.Model.extend({
 
 App.ArtistDetail = DS.Model.extend({
   spins: DS.attr('number'),
-  firstName: DS.attr('string'),
-  lastName: DS.attr('string'),
+  name: DS.attr('string'),
   wikiUrl: DS.attr('string'), 
   twitterUrl: DS.attr('string'),
   songs: DS.attr('emberarr'),
   bands: DS.attr('emberarr'),
+  members: DS.attr('emberarr'),
   spinsByStationDonut: DS.attr('emberobj'),
-  spinsOverTimeArea: DS.attr('emberobj')
+  spinsOverTimeArea: DS.attr('emberobj'),
+  hasBands: function() {
+      var bands = this.get('bands');
+      if(bands && bands.length > 0){
+        return true;
+      }else{
+        return false;
+      };
+  }.property('bands'),
+  hasMembers: function() {
+      var members = this.get('members');
+      if(members && members.length > 0){
+        return true;
+      }else{
+        return false;
+      };   
+  }.property('members'),
 });
 
 App.BandDetail = DS.Model.extend({

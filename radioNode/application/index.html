@@ -89,7 +89,12 @@
   <script type="text/x-handlebars" data-template-name="searchResultItem">
       <div class="result-item">
          {{#if view.selected}} <i class="icon-double-angle-right icon-2x"></i> {{/if}}
-          <a href="#"><strong>{{name}}</strong></a>
+          {{#if isArtist}}
+          {{#linkTo artist typeId}}<strong>{{name}}</strong>{{/linkTo}}
+          {{/if}}
+          {{#if isSong}}
+          {{#linkTo song typeId}}<strong>{{name}}</strong>{{/linkTo}}
+          {{/if}}
           <span class="result-type">{{type}}</span>
           <p class="result-snippet">
             {{snippet}}
@@ -100,7 +105,7 @@
   <script type="text/x-handlebars" data-template-name="artistDetails">
      <div class="header">
        <div class="top">
-         <span class="entity-name">{{firstName}} {{lastName}}</span>
+         <span class="entity-name">{{name}}</span>
          <span class= "entity-totalspins">in total <span class="spins">{{spins}}</span> spins<span>
        </div>
        <div class="entity-type">Artist</div>
@@ -121,23 +126,36 @@
          <div class="caption">Spins over time</div>
          <div id="spins-over-time"></div>
        </div>
+       {{#if hasBands}}
        <div class="bands-container">
          <div class="caption">Bands</div>
          <table class="table table-striped songs-table">
          {{#each bands}}
             <tr>
-              <td>{{name}}</td>
+              <td>{{#linkTo artist id}}{{name}}{{/linkTo}}</td>
            </tr>
           {{/each}}
          </table>
        </div>
+       {{/if}}
+       {{#if hasMembers}}
+       <div class="bands-container">
+         <div class="caption">Members</div>
+         <table class="table table-striped songs-table">
+         {{#each members}}
+            <tr>
+             <td>{{#linkTo artist id}}{{name}}{{/linkTo}}</td>
+           </tr>
+          {{/each}}
+         </table>
+       </div>
+       {{/if}}
        <div class="songs-container">
          <div class="caption">Songs</div>
          <table class="table table-striped songs-table">
          {{#each songs}}
             <tr>
-              <td>{{title}}</td>
-              <td>{{year}}</td>
+              <td>{{#linkTo song id}}{{title}}{{/linkTo}}</td>
            </tr>
           {{/each}}
          </table>
@@ -147,35 +165,20 @@
   <script type="text/x-handlebars" data-template-name="songDetails">
     <div class="header">
       <div class="top">
-        <span class="song-name">{{title}}</span>&nbsp;by&nbsp;<span class="song-name">{{artist}}<span>
+        <span class="song-name">{{title}}</span>
         <span class= "entity-totalspins">in total <span class="spins">{{spins}}</span> spins<span>
       </div>
+      <div>by&nbsp;<span class="song-name">{{artist}}<span></div>
       <div class="entity-type">Song</div>
     </div>
-    <div class="graph-container" style="float:right">
+    <div class="graph-container">
         <div class="caption">Spins by Station</div>
-        <div id="spins-by-station-donut"></div>
+        <div id="spins-by-station-donut" style="margin-left:auto; margin-right:auto;"></div>
      </div>
     <div style="clear:both"></div>
     <div class="graph-container">
       <div class="caption">Spins over time</div>
       <div id="spins-over-time"></div>
-    </div>
-  </script>
-  
-  <script type="text/x-handlebars" data-template-name="bandDetails">
-    <div class="details">
-      <p>hoho this is a band<p>
-       <p>{{name}}, {{spins}}<p>
-       <div id="myfirstchart" style="height: 250px;"></div>
-    </div>
-  </script>
-  
-  <script type="text/x-handlebars" data-template-name="trackDetails">
-    <div class="details">
-      <p>hoho this is a track<p>
-       <p>{{name}}, {{spins}}<p>
-       <div id="myfirstchart" style="height: 250px;"></div>
     </div>
   </script>
 

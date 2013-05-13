@@ -293,8 +293,7 @@
    <field name="identifierText" type="text" indexed="true" stored="true"/>
    <field name="spins" type="sint" indexed="true" stored="true"/>
 
-
-  <field name="identifierPhonetic" type="text_phonetic" indexed="true" stored="false"/> 
+   <field name="identifierPhonetic" type="text_phonetic" indexed="true" stored="false"/> 
 
    <!-- "default" values can be specified for fields, indicating which
         value should be used if no value is specified when adding a document.
