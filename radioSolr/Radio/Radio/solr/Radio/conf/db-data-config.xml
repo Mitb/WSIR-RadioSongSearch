@@ -14,7 +14,7 @@
             <field column="uniqueId" template="${song.type}:${song.id}"/>
 
             <field column="title" name="primaryIdentifier"/>
-            <field column="artist_name" name="secondaryIdentifier"/>
+            <field column="artist_name" name="song_artist_name"/>
             <field column="identifierText" template="${song.title} ${song.artist_name}"/>
             <entity name="radio" query="SELECT count(*) AS spins FROM rs_spin WHERE song_id='${song.id}'">
               <field column="spins" name="spins"/>
@@ -35,15 +35,12 @@
           </entity>
           
           <entity name="membersen" query="SELECT a.name as member FROM RS_Bandmember as bm JOIN RS_Artist as a on bm.member = a.id where bm.band='${artist.id}'">
-            <field column="member" name="members"/>
+            <field column="member" name="artist_members"/>
           </entity>
           
           <entity name="bandsen" query="SELECT a.name as band FROM RS_Bandmember as bm JOIN RS_Artist as a on bm.band = a.id where bm.member='${artist.id}'">
-            <field column="band" name="bands"/>
+            <field column="band" name="artist_bands"/>
           </entity>
-          
-          <field column="secondaryIdentifier" template="${artist.members} ${artist.bands}"/>
-          <field column="identifierText" template="${artist.name} ${artist.members} ${artist.bands}"/>
           
         </entity>
     </document>

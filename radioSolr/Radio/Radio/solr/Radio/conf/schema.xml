@@ -282,65 +282,25 @@
    <field name="price"  type="sfloat" indexed="true" stored="true"/>
    -->
    
+   <!-- common fields -->
    <field name="uniqueId" type="string" indexed="true" stored="true" required="true"/>
    <field name="type" type="string" indexed="true" stored="true"/>
    <field name="typeId" type="string" indexed="true" stored="true" />
-   
-   <field name="primaryIdentifier" type="string" indexed="true" stored="true"/>
-   <field name="secondaryIdentifier" type="string" indexed="true" stored="true"/>
-   <field name="primaryIdentifierText" type="text" indexed="true" stored="false"/>
-   <field name="secondaryIdentifierText" type="text" indexed="true" stored="false"/>
-   <field name="identifierText" type="text" indexed="true" stored="true"/>
    <field name="spins" type="sint" indexed="true" stored="true"/>
-
-   <field name="identifierPhonetic" type="text_phonetic" indexed="true" stored="false"/> 
-
-   <!-- "default" values can be specified for fields, indicating which
-        value should be used if no value is specified when adding a document.
-     -->
-   <!--  
-   <field name="popularity" type="sint" indexed="true" stored="true" default="0"/>
-   <field name="inStock" type="boolean" indexed="true" stored="true"/>
--->
-   <!-- Some sample docs exists solely to demonstrate the spellchecker
-        functionality, this is the only field they container.
-        Typically you might build the spellchecker of "catchall" type field
-        containing all of the text in each document
-     -->
-   <!--  <field name="word" type="string" indexed="true" stored="true"/> -->
-
    
-   <!-- catchall field, containing all other searchable text fields (implemented
-        via copyField further on in this schema  -->
-   <!-- <field name="text" type="text" indexed="true" stored="false" multiValued="true"/> -->
-
-   <!-- non-tokenized version of manufacturer to make it easier to sort or group
-        results by manufacturer.  copied from "manu" via copyField -->
-   <!-- <field name="manu_exact" type="string" indexed="true" stored="false"/> -->
-
-   <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
-        will be used if the name matches any of the patterns.
-        RESTRICTION: the glob-like pattern in the name attribute must have
-        a "*" only at the start or the end.
-        EXAMPLE:  name="*_i" will match any field ending in _i (like myid_i, z_i)
-        Longer patterns will be matched first.  if equal size patterns
-        both match, the first appearing in the schema will be used.  -->
-   <!-- <dynamicField name="*_i"  type="sint"    indexed="true"  stored="true"/>
-   <dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/>
-   <dynamicField name="*_l"  type="slong"   indexed="true"  stored="true"/>
-   <dynamicField name="*_t"  type="text"    indexed="true"  stored="true"/>
-   <dynamicField name="*_b"  type="boolean" indexed="true"  stored="true"/>
-   <dynamicField name="*_f"  type="sfloat"  indexed="true"  stored="true"/>
-   <dynamicField name="*_d"  type="sdouble" indexed="true"  stored="true"/>
-   <dynamicField name="*_dt" type="date"    indexed="true"  stored="true"/>
-
-   <dynamicField name="random*" type="random" /> -->
-
-   <!-- uncomment the following to ignore any fields that don't already match an existing 
-        field name or dynamic field, rather than reporting them as an error. 
-        alternately, change the type="ignored" to some other type e.g. "text" if you want 
-        unknown fields indexed and/or stored by default --> 
-   <!--dynamicField name="*" type="ignored" multiValued="true" /-->
+    <!-- common identifiers text and string resp phonectic versions -->
+   <field name="primaryIdentifier" type="string" indexed="true" stored="true"/>
+   <field name="secondaryIdentifier" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="primaryIdentifierText" type="text" indexed="true" stored="false"/>
+   <field name="secondaryIdentifierText" type="text" indexed="true" stored="false" multiValued="true"/>
+   
+   <field name="identifierText" type="text" indexed="true" stored="true"/>
+   <field name="identifierPhonetic" type="text_phonetic" indexed="true" stored="false"/>    
+   
+   <!-- type dependent fields, used to copy their value to common identifier only -->
+   <field name="artist_members" type="string" indexed="false" stored="false" multiValued="true"/>
+   <field name="artist_bands" type="string" indexed="false" stored="false" multiValued="true"/>
+   <field name="song_artist_name" type="string" indexed="false" stored="false"/>
    
  </fields>
 
@@ -373,8 +333,17 @@
    <copyField source="manu" dest="manu_exact"/>
  -->
     <copyField source="primaryIdentifier" dest="primaryIdentifierText"/>
-    <copyField source="secondaryIdentifier" dest="secondaryIdentifierText"/>
+
+    <copyField source="artist_members" dest="secondaryIdentifier"/>
+    <copyField source="artist_bands" dest="secondaryIdentifier"/>
+    <copyField source="song_artist_name" dest="secondaryIdentifier"/>
+
+    <copyField source="artist_members" dest="secondaryIdentifierText"/>
+    <copyField source="artist_bands" dest="secondaryIdentifierText"/>
+    <copyField source="song_artist_name" dest="secondaryIdentifierText"/>
+    
     <copyField source="identifierText" dest="identifierPhonetic"/>
+
     
 
  <!-- Similarity is the scoring routine for each document vs. a query.

@@ -16,7 +16,7 @@ app.get('/search_results', function(req, res){
   var options = {
     host: 'localhost',
     port: '8983',
-    path: '/solr/Radio/select?q=' + query.replace(" ", "%20OR%20") + '&wt=json&defType=edismax&qf=primaryIdentifier%5E50+secondaryIdentifier%5E30+identifierPhonetic%5E10&mm=1%3C50%25+5%3C70%25&stopwords=true&bf=log(spins)^5&lowercaseOperators=true'
+    path: '/solr/Radio/select?q=' + query.replace(" ", "%20OR%20") + '&wt=json&defType=edismax&qf=primaryIdentifier%5E50+secondaryIdentifierText%5E30+identifierPhonetic%5E10&mm=1%3C50%25+5%3C70%25&stopwords=true&bf=log(spins)^5&lowercaseOperators=true'
     
       
   };
@@ -40,8 +40,8 @@ app.get('/search_results', function(req, res){
       uiJson.search_result_items =  _.map(solrJson.response.docs, function(doc){ 
           counter++;
           result.item_ids.push(counter);
-          var name = ''
-          if(doc.secondaryIdentifier && doc.secondaryIdentifier.trim() != ''){ name = doc.primaryIdentifier + ' - ' + doc.secondaryIdentifier;
+          var name = '';
+          if(doc.secondaryIdentifier && doc.type == 'song' && doc.secondaryIdentifier[0].trim() != ''){ name = doc.primaryIdentifier + ' - ' + doc.secondaryIdentifier;
           }else{ name = doc.primaryIdentifier; }
           return {
              id: counter,
