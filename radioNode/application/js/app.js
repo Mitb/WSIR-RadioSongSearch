@@ -110,6 +110,12 @@ App.SearchRoute = Ember.Route.extend({
             history.pushState(null, null, url[1] + query);
             var res = App.SearchResult.find({query: query});
             var controller = this.controllerFor('searchResult');
+           
+            // clear details
+            parentView = this.router._lookupActiveView('searchResults');
+            parentView.disconnectOutlet('details');
+           
+            controller.set('content', {});
             controller.set('result', res);
         },
         
@@ -142,7 +148,32 @@ App.SearchFormView = Ember.View.extend({
 
 App.SearchResultsView = Ember.View.extend({
     templateName: "searchResults",
-  
+    topHit: null,
+    didInsert: false,
+    
+    determineTopHit: function(){
+      var resultObject = this.get('controller.content.result.firstObject');
+      if(resultObject){
+       var results = resultObject.get('items');
+       var topHit = results.get('firstObject');
+       this.set('topHit',topHit);
+      }
+    }.observes('controller.content.result.firstObject.items.firstObject'),
+   
+    didInsertElement: function(){
+      this.set('didInsert', true)
+   },
+   
+   showTopHitDetails: function(){
+     var topHit = this.get('topHit');
+     var inserted = this.get('didInsert');
+     console.log('th:' + topHit.get('name'));
+     if(inserted && topHit){
+       var controller = this.get('controller');
+       controller.send('showDetails', topHit);
+    }
+   }.observes('topHit','didInsert')
+   
 });
 
 App.SearchResultController = Ember.ObjectController.extend({
