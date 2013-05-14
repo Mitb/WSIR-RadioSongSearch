@@ -7,8 +7,6 @@
 !ui/server/*.class
 
 # solr stuff
-radioSolr/contrib/
-radioSolr/dist/
 radioSolr/Radio/Radio/solr/Radio/data/
 radioSolr/Radio/Radio/solr/Radio/conf/dataimport.properties
 !radioSolr/Radio/**/*.war
