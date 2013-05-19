@@ -10,3 +10,10 @@
 radioSolr/Radio/Radio/solr/Radio/data/
 radioSolr/Radio/Radio/solr/Radio/conf/dataimport.properties
 !radioSolr/Radio/**/*.war
+
+# gedit temporary files
+*~
+
+# except this file
+!.gitignore
+
