@@ -43,7 +43,9 @@ App.SearchResultItem = DS.Model.extend({
   name: DS.attr('string'),
   type: DS.attr('string'),
   typeId: DS.attr('string'),
-  snippet: DS.attr('string'),
+  snippetText: DS.attr('string'),
+  snippetLicense: DS.attr('string'),
+  snippetUrl: DS.attr('string'),
   searchResult: DS.belongsTo('App.SearchResult'),
   isArtist: function(){
     return this.get('type') == 'artist';
