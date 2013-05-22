@@ -2,22 +2,33 @@ App = Ember.Application.create({
     LOG_TRANSITIONS: true
 });
 
+var query;
+var page;
+
 
 App.Router.map(function() {
-    this.route('search', { path: '/search/:query' });
+    this.route('search', { path: '/search/:query/:page' });
     this.route('song', { path: '/song/:id' });
     this.route('artist', { path: '/artist/:id' });
 });
 
+App.ApplicationController = Ember.Controller.extend({
+
+})
+
 App.IndexRoute = Ember.Route.extend({  
     events: {
-        search: function(query) {
-            this.transitionTo('search', query);
-            var res = App.SearchResult.find({query: query});
+        search: function(query, page) {
+            page = page ? page : 1;
+            var res = App.SearchResult.find({query: query, page: page});
             var controller = this.controllerFor('searchResult');
             controller.set('content', {});
             controller.set('result', res);
+            this.transitionTo('search', {query:query, page: page});
         }
+    },
+    serialize: function(model) {
+      return model
     }
 });
 
@@ -33,9 +44,9 @@ App.SongRoute = Ember.Route.extend({
     this.render('songDetail');
   },
   events: {
-      search: function(query) {
-          this.transitionTo('search', query);
-          var res = App.SearchResult.find({query: query});
+      search: function(query, page) {
+          this.transitionTo('search', query, page);
+          var res = App.SearchResult.find({query: query, page: page});
           var controller = this.controllerFor('searchResult');
           controller.set('content', {});
           controller.set('result', res);
@@ -55,9 +66,9 @@ App.ArtistRoute = Ember.Route.extend({
     this.render('artistDetail');
   },
   events: {
-      search: function(query) {
-          this.transitionTo('search', query);
-          var res = App.SearchResult.find({query: query});
+      search: function(query, page) {
+          this.transitionTo('search', query, page);
+          var res = App.SearchResult.find({query: query, page: page});
           var controller = this.controllerFor('searchResult');
           controller.set('content', {});
           controller.set('result', res);
@@ -69,7 +80,9 @@ App.ArtistRoute = Ember.Route.extend({
 App.SearchRoute = Ember.Route.extend({
     
     model: function(params) {
-        return App.SearchResult.find({query: params.query});
+        query =  params.query;
+        page = params.page;
+        return App.SearchResult.find({query: params.query, page: params.page});
     },
   
     setupController: function(controller, model) {
@@ -105,10 +118,10 @@ App.SearchRoute = Ember.Route.extend({
     },
     
     events: {        
-        search: function(query) {  
+        search: function(query, page) {  
             var url = /(.*\/)(.*$)/.exec(document.URL);   
-            history.pushState(null, null, url[1] + query);
-            var res = App.SearchResult.find({query: query});
+            history.pushState(null, null, url[1] + query );
+            var res = App.SearchResult.find({query: query, page: page});
             var controller = this.controllerFor('searchResult');
            
             // clear details
@@ -117,6 +130,7 @@ App.SearchRoute = Ember.Route.extend({
            
             controller.set('content', {});
             controller.set('result', res);
+            this.transitionTo('search', {query: query, page: page});
         },
         
         showDetails: function(model) {
@@ -132,6 +146,9 @@ App.SearchRoute = Ember.Route.extend({
                 controller: controller
             });
         }
+    },
+    serialize: function(model) {
+      return model
     }
 });
 
@@ -141,7 +158,9 @@ App.SearchFormView = Ember.View.extend({
     submit: function(evt){
         evt.preventDefault(); 
         var query = $('#searchbar').val();
-        this.get('controller').send('search', query);
+        var page = 1;
+        this.get('controller').send('search', query, page);
+        
     },
   
 });
@@ -177,6 +196,23 @@ App.SearchResultsView = Ember.View.extend({
 });
 
 App.SearchResultController = Ember.ObjectController.extend({
+
+  pageNumbers: function(){
+    var pages = []
+    var startNumber = 3;
+    var pageCount = this.get('result.firstObject.hits') / 10
+
+    for (var i = startNumber-2; i <  Math.min(startNumber+3, pageCount); i++) {
+      pages.push(i)
+    }
+    return pages;
+  }.property('result'),
+
+  changePage: function(pageNumber){
+    setTimeout(function(){    window.location.reload()}, 100);
+    this.transitionToRoute('search', {query: query, page: pageNumber});
+  }
+
 
 });
 
@@ -273,4 +309,5 @@ App.SongDetailView = App.DetailView.extend({
 
 App.ArtistDetailView = App.DetailView.extend({
     templateName: 'artistDetails'
-});    
+});
+

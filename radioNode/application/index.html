@@ -45,18 +45,6 @@
        {{outlet}}
   </div>
 
-  <div class="pagination pagination-centered">
-    <input type="hidden" id="pager" name="pager" value=""></input>
-    <ul>
-      <li><a href="#">Prev</a></li>  
-      <li><a href="#">1</a></li>  
-      <li><a href="#">2</a></li>  
-      <li><a href="#">3</a></li>  
-      <li><a href="#">4</a></li>  
-      <li><a href="#">Next</a></li>  
-    </ul>
-  </div>
-
   <footer class="footer">   
           <p>Designed and built <a href="http://www.uni-mannheim.de/">@Unviersity of Mannheim</a></p>
   </footer>
@@ -87,6 +75,13 @@
          </div>
        </div>
      </div>
+    <div class="pagination pagination-centered">
+      <ul>
+        {{#each pageNumbers}}
+          <li><span {{action changePage this}}>{{this}}</span></li> 
+        {{/each}}
+      </ul>
+  </div>
   </script>
   
   <script type="text/x-handlebars" data-template-name="resultsList">
