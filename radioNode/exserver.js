@@ -33,7 +33,7 @@ app.get('/search_results', function(req, res){
     solrResponse.on('end', function () {
       var uiJson = {};
       if(solrData){
-      var solrJson = solrData ? JSON.parse(solrData) : {};
+      var solrJson = solrData ? JSON.parse(solrData) : {response:{}};
       var result = {};
       result.hits = solrJson.response.numFound;
       result.item_ids = [];

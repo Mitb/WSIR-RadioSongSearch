@@ -81,7 +81,7 @@ App.SearchRoute = Ember.Route.extend({
     
     model: function(params) {
         query =  params.query;
-        page = params.page;
+        page = parseInt(params.page);
         return App.SearchResult.find({query: params.query, page: params.page});
     },
   
@@ -159,8 +159,8 @@ App.SearchFormView = Ember.View.extend({
         evt.preventDefault(); 
         var query = $('#searchbar').val();
         var page = 1;
+        setTimeout(function(){    window.location.reload()}, 0);
         this.get('controller').send('search', query, page);
-        
     },
   
 });
@@ -198,11 +198,15 @@ App.SearchResultsView = Ember.View.extend({
 App.SearchResultController = Ember.ObjectController.extend({
 
   pageNumbers: function(){
-    var pages = []
-    var startNumber = 3;
+    var pages = [];
+    var startNumber = page;
     var pageCount = this.get('result.firstObject.hits') / 10
-
-    for (var i = startNumber-2; i <  Math.min(startNumber+3, pageCount); i++) {
+    if(page>2){
+      startNumber = startNumber - 2;
+    }else{
+      startNumber = 1;
+    }
+    for (var i = (startNumber); i <=  Math.min(startNumber+5, Math.ceil(pageCount)); i++) {
       pages.push(i)
     }
     return pages;
