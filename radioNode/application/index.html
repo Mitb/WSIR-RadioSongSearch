@@ -102,9 +102,19 @@
           {{#linkTo song typeId }}<strong>{{name}}</strong>{{/linkTo}}
           {{/if}}
           <span class="result-type">{{type}}</span>
-          <p class="result-snippet">
-            {{snippet}}
+          {{#if snippetText}}
+          <div class="result-snippet-div">
+            <a class="result-snippet-url" target="_blank" {{bindAttr href="snippetUrl"}}>{{snippetUrl}}</a>
+            <p class="result-snippet-text">
+              {{snippetText}} <span class="result-type">{{snippetLicense}}</span>
+            </p>
+          </div>
+          {{else}}
+          <p class="result-snippet-text">
+            Horem ipsum dolor sit amet, consectetur adipiscing elit. Proin nunc justo, vestibulum nec egestas quis, 
+            luctus eu elit.
           </p>
+          {{/if}}
       </div>
   </script>
   

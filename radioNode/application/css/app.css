@@ -138,9 +138,21 @@ left: 0;
     padding-top: 10px;
 }
 
-.result-snippet {
+.result-snippet-text {
     line-height: 1.24;
     color: #444;
     font-size: small;
     font-family: arial,sans-serif;
+}
+
+.result-snippet-div {
+  margin: 0px;
+  padding: 0px;
+}
+
+.result-snippet-div a {
+  font-size: 12px;
+  text-decoration:none;
+  color: #093;
+  font-style: normal;
 }

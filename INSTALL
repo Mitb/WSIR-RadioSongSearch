@@ -1,0 +1,4 @@
+# please install MySQL, nodejs, java
+
+sudo apt-get install nodejs mysql
+

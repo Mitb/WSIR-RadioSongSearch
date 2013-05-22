@@ -302,6 +302,12 @@
    <field name="artist_bands" type="string" indexed="false" stored="false" multiValued="true"/>
    <field name="song_artist_name" type="string" indexed="false" stored="false"/>
    
+   <!-- snippet -->
+   <field name="snippetText" type="string" indexed="false" stored="true"/>
+   <field name="snippetLicense" type="string" indexed="false" stored="true"/>
+   <field name="snippetUrl" type="string" indexed="false" stored="true"/>
+   
+   
  </fields>
 
  <!-- Field to use to determine and enforce document uniqueness. 

@@ -12,7 +12,7 @@ app.get('/search_results', function(req, res){
 	var urlParts = url.parse(req.url, true);
 	var queryParams = urlParts.query;
   var query = queryParams.query;
-  var page = queryParams.page ? queryParams.page : 1;
+  var page = queryParams.page ? queryParams.page : 0;
   var numberOfResults = 10;
   console.log('Query: "' + query + '" has been received');
   console.log('Page: '+ page);
@@ -51,7 +51,9 @@ app.get('/search_results', function(req, res){
              name: name,
              type: doc.type,
              type_id: doc.typeId,
-             snippet: "Horem ipsum dolor sit amet, consectetur adipiscing elit. Proin nunc justo, vestibulum nec egestas quis, luctus eu elit."
+             snippet_text: doc.snippetText,
+             snippet_license: doc.snippetLicense,
+             snippet_url: doc.snippetUrl
            }
        });
        console.log('Number of Results: ' + solrJson.response.numFound);
