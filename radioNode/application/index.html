@@ -77,9 +77,11 @@
      </div>
     <div class="pagination pagination-centered">
       <ul>
+          <li><a href="#" {{action changePage "pre"}}>Prev</a></li>
         {{#each pageNumbers}}
-          <li><span {{action changePage this}}>{{this}}</span></li> 
+          <li><a href="#" {{action changePage this}}>{{this}}</a></li> 
         {{/each}}
+          <li><a href="#" {{action changePage "next"}}>Next</a></li>
       </ul>
   </div>
   </script>

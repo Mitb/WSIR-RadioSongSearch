@@ -200,7 +200,7 @@ App.SearchResultController = Ember.ObjectController.extend({
   pageNumbers: function(){
     var pages = [];
     var startNumber = page;
-    var pageCount = this.get('result.firstObject.hits') / 10
+    var pageCount = this.get('result.firstObject.hits') / 10;
     if(page>2){
       startNumber = startNumber - 2;
     }else{
@@ -213,6 +213,20 @@ App.SearchResultController = Ember.ObjectController.extend({
   }.property('result'),
 
   changePage: function(pageNumber){
+    if(pageNumber === "pre"){
+      if(page > 1){
+        pageNumber = parseInt(page-1);
+      }else{
+        pageNumber = page;
+      }
+    }
+    if (pageNumber === "next") {
+      if(page < Math.ceil(this.get('result.firstObject.hits') / 10)){
+        pageNumber = parseInt(page+1);
+      }else{
+        pageNumber = page;
+      }      
+    };
     setTimeout(function(){    window.location.reload()}, 100);
     this.transitionToRoute('search', {query: query, page: pageNumber});
   }
