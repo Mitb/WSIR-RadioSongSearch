@@ -10,6 +10,7 @@ App.Router.map(function() {
     this.route('search', { path: '/search/:query/:page' });
     this.route('song', { path: '/song/:id' });
     this.route('artist', { path: '/artist/:id' });
+    this.route('album', { path: '/album/:id' });
 });
 
 App.ApplicationController = Ember.Controller.extend({
@@ -76,6 +77,28 @@ App.ArtistRoute = Ember.Route.extend({
   }
 });
 
+App.AlbumRoute = Ember.Route.extend({
+  model: function(params) {
+     return params.id;
+  },
+  setupController: function(controller, modelId) {
+    var detailsModel = App.AlbumDetail.find(modelId);
+    this.controllerFor('albumDetail').set('content', detailsModel);
+  },
+  renderTemplate: function() {
+    this.render('albumDetail');
+  },
+  events: {
+      search: function(query, page) {
+          this.transitionTo('search', query, page);
+          var res = App.SearchResult.find({query: query, page: page});
+          var controller = this.controllerFor('searchResult');
+          controller.set('content', {});
+          controller.set('result', res);
+      }
+  }
+});
+
 
 App.SearchRoute = Ember.Route.extend({
     
@@ -105,15 +128,20 @@ App.SearchRoute = Ember.Route.extend({
     
     getDetailsModel: function(type, id){
       var modelClass;
+      console.log("requested details of type: " + type + " id:" + id);
       switch (type) {
           case "artist": 
-          modelClass = App.ArtistDetail
+          modelClass = App.ArtistDetail;
           break;
           case "song": 
-          modelClass = App.SongDetail
+          modelClass = App.SongDetail;
+          break;
+          case "album": 
+          modelClass = App.AlbumDetail;
           break;
           default: console.log("unknown type: " + model.type); 
       }
+      console.log("determined model calss:" + modelClass);
       return modelClass.find(id);
     },
     
@@ -280,6 +308,10 @@ App.SongDetailController = Ember.ObjectController.extend({
 
 });
 
+App.AlbumDetailController = Ember.ObjectController.extend({
+
+});
+
 App.DetailView = Ember.View.extend({
     didInsert: false,
     
@@ -327,5 +359,9 @@ App.SongDetailView = App.DetailView.extend({
 
 App.ArtistDetailView = App.DetailView.extend({
     templateName: 'artistDetails'
+});
+
+App.AlbumDetailView = Ember.View.extend({
+    templateName: 'albumDetails'
 });
 
