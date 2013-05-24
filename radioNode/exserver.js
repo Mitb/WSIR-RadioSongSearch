@@ -17,7 +17,7 @@ app.get('/search_results', function(req, res){
   console.log('Query: "' + query + '" has been received');
   console.log('Page: '+ page);
   var start = (page-1) * 10;
-  var re = new RegExp(find, '%20');
+  var re = new RegExp('%20', 'g');
   var options = {
     host: 'localhost',
     port: '8983',

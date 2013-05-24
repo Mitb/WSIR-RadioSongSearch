@@ -186,7 +186,7 @@ App.SearchFormView = Ember.View.extend({
     submit: function(evt){
         evt.preventDefault(); 
         var query = $('#searchbar').val();
-        var re = new RegExp(find, ' ');
+        var re = new RegExp(' ', 'g');
         var escapedQuery = query.replace(re, "%20");
         var page = 1;
         setTimeout(function(){    window.location.reload()}, 0);
