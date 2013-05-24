@@ -45,11 +45,11 @@ App.SongRoute = Ember.Route.extend({
   },
   events: {
       search: function(query, page) {
-          this.transitionTo('search', query, page);
           var res = App.SearchResult.find({query: query, page: page});
           var controller = this.controllerFor('searchResult');
           controller.set('content', {});
           controller.set('result', res);
+          this.transitionTo('search', query, page);
       }
   }
 });
@@ -227,7 +227,7 @@ App.SearchResultController = Ember.ObjectController.extend({
         pageNumber = page;
       }      
     };
-    setTimeout(function(){    window.location.reload()}, 100);
+    setTimeout(function(){    window.location.reload()}, 0);
     this.transitionToRoute('search', {query: query, page: pageNumber});
   }
 

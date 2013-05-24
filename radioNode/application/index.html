@@ -69,12 +69,6 @@
        <div class="row-fluid">
          <div class="span5 offset1">
             {{outlet results}}
-         </div>
-         <div class="span6">
-            {{outlet details}}
-         </div>
-       </div>
-     </div>
     <div class="pagination pagination-centered">
       <ul>
           <li><a href="#" {{action changePage "pre"}}>Prev</a></li>
@@ -83,7 +77,13 @@
         {{/each}}
           <li><a href="#" {{action changePage "next"}}>Next</a></li>
       </ul>
-  </div>
+    </div>
+         </div>
+         <div class="span6">
+            {{outlet details}}
+         </div>
+       </div>
+     </div>
   </script>
   
   <script type="text/x-handlebars" data-template-name="resultsList">
