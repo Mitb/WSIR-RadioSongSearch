@@ -43,7 +43,7 @@ app.get('/search_results', function(req, res){
           counter++;
           result.item_ids.push(counter);
           var name = '';
-          if(doc.secondaryIdentifier && doc.type == 'song' && doc.secondaryIdentifier[0].trim() != ''){ name = doc.primaryIdentifier + ' - ' + doc.secondaryIdentifier;
+          if(doc.secondaryIdentifier && (doc.type == 'song' || doc.type == 'album') && doc.secondaryIdentifier[0].trim() != ''){ name = doc.primaryIdentifier + ' - ' + doc.secondaryIdentifier;
           }else{ name = doc.primaryIdentifier; }
           return {
              id: counter,
@@ -144,6 +144,33 @@ app.get('/song_details/:songId', function(req, res){
           artist: ''+attr.artist_name,
           spins_by_station_donut: spinsByStationDonut,
           spins_over_time_area: spinsOverTimeArea
+        }
+      });
+  });
+});
+
+app.get('/album_details/:albumId', function(req, res){
+  var id = req.params.albumId;
+  console.log("Details requested for Album ID: "+ id);
+  async.parallel({
+      attr: function(callback){
+          ask.getAlbum(callback, id);
+      },
+      songs: function(callback){
+          ask.getSongsOfAlbum(callback, id);
+      }
+  },
+  function(err, album) {
+    var attr = album.attr || {};
+    var songs = album.songs || [];
+    res.send({
+        album_detail: {
+          id: id,
+          title: ''+attr.album_title,
+          artist_name: ''+attr.album_artist_name,
+          artist_id: ''+attr.album_artist_id,
+          release_year: ''+attr.released,
+          tracks: songs
         }
       });
   });

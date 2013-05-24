@@ -103,6 +103,9 @@
           {{#if isSong}}
           {{#linkTo song typeId }}<strong>{{name}}</strong>{{/linkTo}}
           {{/if}}
+          {{#if isAlbum}}
+          {{#linkTo album typeId }}<strong>{{name}}</strong>{{/linkTo}}
+          {{/if}}
           <span class="result-type">{{type}}</span>
           {{#if snippetText}}
           <div class="result-snippet-div">
@@ -214,6 +217,35 @@
       <div class="caption">Spins over time</div>
       <div id="spins-over-time"></div>
     </div>
+    </div>
+  </script>
+  
+  <script type="text/x-handlebars" data-template-name="albumDetails">
+    <div class="details">
+    <div class="header">
+      <div class="top">
+        <span class="song-name">{{title}}</span>
+        <span class= "entity-totalspins">release year <span class="spins">{{releaseYear}}</span></span>
+      </div>
+      <div>by&nbsp;<span class="song-name">{{artistName}}<span></div>
+      <div class="entity-type">Album</div>
+    </div>
+    
+    {{#if hasTracks}}
+    <div class="tracks-container">
+      <div class="caption">Tracks</div>
+      <table class="table table-striped songs-table">
+      {{#each tracks}}
+         <tr>
+          <td>{{track}}</td>
+          <td>{{#linkTo song song_id}}{{song_title}}{{/linkTo}}</td>
+          <td>{{#linkTo artist artist_id}}{{artist_name}}{{/linkTo}}</td>
+        </tr>
+       {{/each}}
+      </table>
+    </div>
+    {{/if}}
+    
     </div>
   </script>
 

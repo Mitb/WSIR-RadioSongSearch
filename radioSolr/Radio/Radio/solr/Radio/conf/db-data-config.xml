@@ -1,73 +1,89 @@
 <dataConfig>
 
   <dataSource type="JdbcDataSource" 
-              driver="com.mysql.jdbc.Driver"
-              convertType="true"
-              url="jdbc:mysql://localhost/radio" 
-              user="root" 
-              password=""/>
-    <script><![CDATA[
-                    function SnippetTrans(row)        {
-                        var text = row.get('text').substring(0,157).replace('\r\n|\n|\r','') + '...';
-                        row.put('snippetText', text);
+    driver="com.mysql.jdbc.Driver"
+    convertType="true"
+    url="jdbc:mysql://localhost/radio" 
+    user="root" 
+    password=""/>
+    <script>
+      <![CDATA[
+      function SnippetTrans(row) {
+      var text = row.get('text').substring(0,157).replace('\r\n|\n|\r','') + '...';
+      row.put('snippetText', text);
                 
-                        var url =  row.get('url');
-                        row.put('snippetUrl', url);
+      var url =  row.get('url');
+      row.put('snippetUrl', url);
                         
-                        var licenseType =  row.get('license_type');
-                        var licenseVersion = row.get('license_version');  
-                        row.put('snippetLicense', licenseType + ' ' + licenseVersion)
+      var licenseType =  row.get('license_type');
+      var licenseVersion = row.get('license_version');  
+      row.put('snippetLicense', licenseType + ' ' + licenseVersion)
                 
-                        return row;
-                    }
-    ]]></script>
+      return row;
+      }
+      ]]>
+    </script>
     <document>      
-        <entity name="song" rootEntity="true" transformer="TemplateTransformer"
-           query="SELECT id, title, artist_id, artist_name FROM RS_Song">
-            <field column="type" template="song"/>       
-            <field column="id" name="typeId"/>
-            <field column="uniqueId" template="${song.type}:${song.id}"/>
+      <entity name="song" rootEntity="true" transformer="TemplateTransformer"
+        query="SELECT id, title, artist_id, artist_name FROM RS_Song">
+        <field column="type" template="song"/>       
+        <field column="id" name="typeId"/>
+        <field column="uniqueId" template="${song.type}:${song.id}"/>
 
-            <field column="title" name="primaryIdentifier"/>
-            <field column="artist_name" name="song_artist_name"/>
-            <field column="identifierText" template="${song.title} ${song.artist_name}"/>
+        <field column="title" name="primaryIdentifier"/>
+        <field column="artist_name" name="song_artist_name"/>
+        <field column="identifierText" template="${song.title} ${song.artist_name}"/>
             
-            <entity name="radio" query="SELECT count(*) AS spins FROM rs_spin WHERE song_id='${song.id}'">
-              <field column="spins" name="spins"/>
-            </entity>
-            
-            <entity name="snippet" query="SELECT url, license_type, license_version, text FROM rs_biography WHERE artist_id='${song.artist_id}' limit 1" transformer="script:SnippetTrans">
-            </entity>
-            
-            
+        <entity name="radio" query="SELECT count(*) AS spins FROM rs_spin WHERE song_id='${song.id}'">
+          <field column="spins" name="spins"/>
         </entity>
-        
-        <entity name="artist" rootEntity="true" transformer="TemplateTransformer"
-           query="SELECT id, name FROM rs_artist">
-          <field column="type" template="artist"/>    
-          <field column="id" name="typeId"/>
-          <field column="uniqueId" template="${artist.type}:${artist.id}"/>
             
-          <field column="name" name="primaryIdentifier"/>
-          <field column="identifierText" template="${artist.name}"/>
+        <entity name="snippet" query="SELECT url, license_type, license_version, text FROM rs_biography WHERE artist_id='${song.artist_id}' limit 1" transformer="script:SnippetTrans">
+        </entity>      
+      </entity>
+        
+        
+      <entity name="artist" rootEntity="true" transformer="TemplateTransformer"
+        query="SELECT id, name FROM rs_artist">
+        <field column="type" template="artist"/>    
+        <field column="id" name="typeId"/>
+        <field column="uniqueId" template="${artist.type}:${artist.id}"/>
+            
+        <field column="name" name="primaryIdentifier"/>
+        <field column="identifierText" template="${artist.name}"/>
           
-          <entity name="radio" query="SELECT count(*) AS spins FROM rs_spin WHERE artist_id='${artist.id}'">
-            <field column="spins" name="spins"/>
-          </entity>
+        <entity name="radio" query="SELECT count(*) AS spins FROM rs_spin WHERE artist_id='${artist.id}'">
+          <field column="spins" name="spins"/>
+        </entity>
           
-          <entity name="membersen" query="SELECT a.name as member FROM RS_Bandmember as bm JOIN RS_Artist as a on bm.member = a.id where bm.band='${artist.id}'">
-            <field column="member" name="artist_members"/>
-          </entity>
+        <entity name="membersen" query="SELECT a.name as member FROM RS_Bandmember as bm JOIN RS_Artist as a on bm.member = a.id where bm.band='${artist.id}'">
+          <field column="member" name="artist_members"/>
+        </entity>
           
-          <entity name="bandsen" query="SELECT a.name as band FROM RS_Bandmember as bm JOIN RS_Artist as a on bm.band = a.id where bm.member='${artist.id}'">
-            <field column="band" name="artist_bands"/>
-          </entity>
+        <entity name="bandsen" query="SELECT a.name as band FROM RS_Bandmember as bm JOIN RS_Artist as a on bm.band = a.id where bm.member='${artist.id}'">
+          <field column="band" name="artist_bands"/>
+        </entity>
           
   
-          <entity name="snippet" query="SELECT url, license_type, license_version, text FROM rs_biography WHERE artist_id='${artist.id}' limit 1" transformer="script:SnippetTrans">
-          </entity>
-          
+        <entity name="snippet" query="SELECT url, license_type, license_version, text FROM rs_biography WHERE artist_id='${artist.id}' limit 1" transformer="script:SnippetTrans">
         </entity>
+      </entity>
+      
+      <entity name="album" rootEntity="true" transformer="TemplateTransformer"
+        query="SELECT album_id, album_title, album_artist_name, album_artist_id FROM rs_album">
+        
+        <field column="type" template="album"/>    
+        <field column="album_id" name="typeId"/>
+        <field column="uniqueId" template="${album.type}:${album.album_id}"/>
+        
+        <field column="album_title" name="primaryIdentifier"/>
+        <field column="album_artist_name" name="secondaryIdentifier"/>
+        <field column="identifierText" template="${album.album_title} ${album.album_artist_name}"/>
+        
+        <entity name="radio" query="SELECT count(*) AS spins FROM rs_spin WHERE artist_id='${album.album_artist_id}'">
+          <field column="spins" name="spins"/>
+        </entity>
+      </entity>
     </document>
-</dataConfig>
+  </dataConfig>
 

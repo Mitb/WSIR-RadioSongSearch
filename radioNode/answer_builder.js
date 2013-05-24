@@ -40,6 +40,26 @@ function getArtist(callback, artistId){
   );
 }
 
+function getAlbum(callback, albumId){
+  connection.query(
+   'SELECT album_artist_name, album_artist_id, album_id, album_title, released FROM rs_album WHERE album_id = \''+albumId+'\'',
+    function(err, rows, fields) {
+      if(err) throw err;
+      callback(null, rows[0]); 
+    }
+  );
+}
+
+function getSongsOfAlbum(callback, albumId){
+  connection.query(
+    'SELECT track_number as track, song_title, song_id, song_artist_name as artist_name , song_artist_id as artist_id FROM RS_Tracklist WHERE album_id = \''+albumId+'\'',
+    function(err, rows, fields) {
+      if(err) throw err;
+      callback(null, rows); 
+    }
+  );
+}
+
 function getSpinsOverTimeForSong(callback, songId){  
 connection.query( 'SELECT st.name AS stationName, sp.station_id as stationId, \
                    FROM_UNIXTIME(sp.timestamp) AS timestamp \
@@ -151,3 +171,5 @@ exports.getSpinsOverTimeForSong = getSpinsOverTimeForSong;
 exports.getSpinsOverTimeForArtist = getSpinsOverTimeForArtist;
 exports.buildAreaOverTimeChartFrom = buildAreaOverTimeChartFrom;
 exports.buildSpinsByStationDonutFrom = buildSpinsByStationDonutFrom;
+exports.getAlbum = getAlbum;
+exports.getSongsOfAlbum = getSongsOfAlbum;

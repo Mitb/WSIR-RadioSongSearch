@@ -53,6 +53,9 @@ App.SearchResultItem = DS.Model.extend({
   isSong: function(){
     return this.get('type') == 'song';
   }.property('type'),
+  isAlbum: function(){
+    return this.get('type') == 'album';
+  }.property('type'),
 });
 
 
@@ -92,27 +95,20 @@ App.ArtistDetail = DS.Model.extend({
   }.property('members'),
 });
 
-App.BandDetail = DS.Model.extend({
-  spins: DS.attr('number'),
-  name: DS.attr('string'),
+App.AlbumDetail = DS.Model.extend({
+  title: DS.attr('string'),
+  artistName: DS.attr('string'),
+  artistId: DS.attr('string'),
+  releaseYear: DS.attr('string'),
+  tracks: DS.attr('emberarr'),
+  hasTracks: function() {
+      var tracks = this.get('tracks');
+      if(tracks && tracks.length > 0){
+        return true;
+      }else{
+        return false;
+      };
+  }.property('tracks'),
 });
-
-App.Song = DS.Model.extend({
-  spins: DS.attr('number'),
-  name: DS.attr('string'),
-});
-
-App.Artist = DS.Model.extend({
-  spins: DS.attr('number'),
-  firstName: DS.attr('string'),
-  lastName: DS.attr('string'),
-});
-
-App.Band = DS.Model.extend({
-  spins: DS.attr('number'),
-  name: DS.attr('string'),
-  lastName: DS.attr('string'),
-});
-
 
 
