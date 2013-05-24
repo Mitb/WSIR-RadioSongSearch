@@ -271,7 +271,6 @@ App.SearchResultController = Ember.ObjectController.extend({
     this.transitionToRoute('search', {query: query, page: pageNumber});
   }
 
-
 });
 
 
@@ -284,7 +283,12 @@ App.SearchResultItemView = Ember.View.extend({
         controller.send('showDetails', model);
         App.SearchResultItemView.deselectAll();
         this.set('selected', true);
-    }
+    },
+
+    formerQuery: function(){
+      var re = new RegExp(find, '%20');
+      return query.replace(re, " ");
+    }.property()
 });
 
 App.SearchResultItemView.reopenClass({
