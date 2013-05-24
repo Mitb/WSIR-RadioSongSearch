@@ -57,7 +57,7 @@
   <script type="text/x-handlebars" data-template-name="searchForm">
   <form class="form-search">
     <div class="input-append offset4">
-      <input id="searchbar" type="text" placeholder="Type artist or title" class="span3 search-query">
+      <input id="searchbar" type="text" placeholder="Type artist or title" class="span3 search-query" {{bindAttr value="formerQuery"}}>
       <button type="submit" class="btn">Search</button>
     </div>
   </form>

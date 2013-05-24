@@ -259,8 +259,12 @@ App.SearchResultController = Ember.ObjectController.extend({
     };
     setTimeout(function(){    window.location.reload()}, 0);
     this.transitionToRoute('search', {query: query, page: pageNumber});
-  }
+  },
 
+  formerQuery: function(){
+    var re = new RegExp(find, '%20');
+    return query.replace(re, " ");
+  }.property('formerQuery')
 
 });
 
