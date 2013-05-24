@@ -192,6 +192,16 @@ App.SearchFormView = Ember.View.extend({
         setTimeout(function(){    window.location.reload()}, 0);
         this.get('controller').send('search', escapedQuery, page);
     },
+    
+    queryValue: function(){ 
+      if(query){
+        var re = new RegExp('%20', 'g');
+        var plainQuery = query.replace(re, ' ');
+        return plainQuery;
+      }else{
+        return '';
+      }
+    }.property()
   
 });
 
