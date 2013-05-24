@@ -20,7 +20,7 @@ app.get('/search_results', function(req, res){
   var options = {
     host: 'localhost',
     port: '8983',
-    path: '/solr/Radio/select?q=' + query.replace("%20", "%20OR%20") + '&wt=json&defType=edismax&qf=primaryIdentifierText%5E50+secondaryIdentifierText%5E30+identifierPhonetic%5E10&mm=1%3C50%25+5%3C70%25&stopwords=true&bf=log(spins)^5&start='+start+'&row='+numberOfResults+'&lowercaseOperators=true'   
+    path: '/solr/Radio/select?q=' + query.replaceAll("%20", "%20OR%20") + '&wt=json&defType=edismax&qf=primaryIdentifierText%5E50+secondaryIdentifierText%5E30+identifierPhonetic%5E10&mm=1%3C50%25+5%3C70%25&stopwords=true&bf=log(spins)^5&start='+start+'&row='+numberOfResults+'&lowercaseOperators=true'   
   };
 
   console.log('Solr-Path ' + options.path );
