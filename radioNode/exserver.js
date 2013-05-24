@@ -90,20 +90,20 @@ app.get('/artist_details/:artistId', function(req, res){
   },
   function(err, artist) {
       var attr = artist.attr || {};
-      var twitterUrl = attr.twiter_id ? 'https://twitter.com/' + attr.twiter_id : attr.twiter_id;
+      var twitterUrl = attr.twitter_id ? 'https://twitter.com/' + attr.twitter_id : attr.twitter_id;
       var facebookUrl = attr.facebook_id ? 'https://facebook.com/' + attr.facebook_id : attr.facebook_id;
-      var lastfmUrl = attr.lastfm_id ? 'http://www.last.fm/user/' + attr.lastfm_id : attr.lastfm_id;
+      var lastfmUrl = attr.lastfm_id ? 'http://www.last.fm/music/' + attr.lastfm_id : attr.lastfm_id;
     
       var spins = artist.spins || [];
       var spinsOverTimeArea = ask.buildAreaOverTimeChartFrom(spins);
       var spinsByStationDonut = ask.buildSpinsByStationDonutFrom(spins);
-    
+      console.log(twitterUrl);
       res.send({
         artist_detail: {
           id: id,
           spins: spins.length,
           name: attr.name,
-          homepage: attr.homepage,
+          homepage_url: attr.homepage,
           wiki_url: attr.wikipedia_en, 
           twitter_url: twitterUrl,
           facebook_url: facebookUrl,

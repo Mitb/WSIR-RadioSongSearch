@@ -70,8 +70,11 @@ App.SongDetail = DS.Model.extend({
 App.ArtistDetail = DS.Model.extend({
   spins: DS.attr('number'),
   name: DS.attr('string'),
+  homepageUrl: DS.attr('string'), 
   wikiUrl: DS.attr('string'), 
   twitterUrl: DS.attr('string'),
+  lastfmUrl: DS.attr('string'),
+  facebookUrl: DS.attr('string'),
   songs: DS.attr('emberarr'),
   bands: DS.attr('emberarr'),
   members: DS.attr('emberarr'),
