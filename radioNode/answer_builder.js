@@ -42,7 +42,7 @@ function getArtist(callback, artistId){
 
 function getAlbum(callback, albumId){
   connection.query(
-   'SELECT album_artist_name, album_artist_id, album_id, album_title, released FROM rs_album WHERE album_id = \''+albumId+'\'',
+   'SELECT album_artist_name, album_artist_id, album_id, album_title, released FROM RS_Album WHERE album_id = \''+albumId+'\'',
     function(err, rows, fields) {
       if(err) throw err;
       callback(null, rows[0]); 
@@ -63,7 +63,7 @@ function getSongsOfAlbum(callback, albumId){
 function getSpinsOverTimeForSong(callback, songId){  
 connection.query( 'SELECT st.name AS stationName, sp.station_id as stationId, \
                    FROM_UNIXTIME(sp.timestamp) AS timestamp \
-                     FROM rs_spin AS sp JOIN RS_Station AS st \
+                     FROM RS_Spin AS sp JOIN RS_Station AS st \
                      ON sp.station_id = st.id \
                      WHERE song_id = \''+ songId +'\' \
                      GROUP BY stationId, timestamp \
@@ -77,7 +77,7 @@ function(err, rows, fields) {
 function getSpinsOverTimeForArtist(callback, artistId){  
 connection.query( 'SELECT st.name AS stationName, sp.station_id as stationId, \
                    FROM_UNIXTIME(sp.timestamp) AS timestamp \
-                     FROM rs_spin AS sp JOIN RS_Station AS st \
+                     FROM RS_Spin AS sp JOIN RS_Station AS st \
                      ON sp.station_id = st.id \
                      WHERE artist_id = \''+ artistId +'\' \
                      GROUP BY stationId, timestamp \

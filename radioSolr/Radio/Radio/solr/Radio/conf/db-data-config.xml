@@ -9,7 +9,11 @@
     <script>
       <![CDATA[
       function SnippetTrans(row) {
-      var text = row.get('text').substring(0,157).replace('\r\n|\n|\r','') + '...';
+
+      var text = row.get('text');
+      var len = Math.min(157, text.length());
+
+      text = text.substring(0, len).replace('\r\n|\n|\r','') + '...';
       row.put('snippetText', text);
                 
       var url =  row.get('url');
