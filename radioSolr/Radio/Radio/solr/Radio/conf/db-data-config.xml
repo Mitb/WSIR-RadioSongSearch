@@ -3,13 +3,17 @@
   <dataSource type="JdbcDataSource" 
     driver="com.mysql.jdbc.Driver"
     convertType="true"
-    url="jdbc:mysql://localhost/radio" 
+    url="jdbc:mysql://localhost/Radio" 
     user="root" 
     password=""/>
     <script>
       <![CDATA[
       function SnippetTrans(row) {
-      var text = row.get('text').substring(0,157).replace('\r\n|\n|\r','') + '...';
+
+      var text = row.get('text');
+      var len = Math.min(157, text.length());
+
+      text = text.substring(0, len).replace('\r\n|\n|\r','') + '...';
       row.put('snippetText', text);
                 
       var url =  row.get('url');
@@ -34,17 +38,17 @@
         <field column="artist_name" name="song_artist_name"/>
         <field column="identifierText" template="${song.title} ${song.artist_name}"/>
             
-        <entity name="radio" query="SELECT count(*) AS spins FROM rs_spin WHERE song_id='${song.id}'">
+        <entity name="radio" query="SELECT count(*) AS spins FROM RS_Spin WHERE song_id='${song.id}'">
           <field column="spins" name="spins"/>
         </entity>
             
-        <entity name="snippet" query="SELECT url, license_type, license_version, text FROM rs_biography WHERE artist_id='${song.artist_id}' limit 1" transformer="script:SnippetTrans">
+        <entity name="snippet" query="SELECT url, license_type, license_version, text FROM RS_Biography WHERE artist_id='${song.artist_id}' limit 1" transformer="script:SnippetTrans">
         </entity>      
       </entity>
         
         
       <entity name="artist" rootEntity="true" transformer="TemplateTransformer"
-        query="SELECT id, name FROM rs_artist">
+        query="SELECT id, name FROM RS_Artist">
         <field column="type" template="artist"/>    
         <field column="id" name="typeId"/>
         <field column="uniqueId" template="${artist.type}:${artist.id}"/>
@@ -52,7 +56,7 @@
         <field column="name" name="primaryIdentifier"/>
         <field column="identifierText" template="${artist.name}"/>
           
-        <entity name="radio" query="SELECT count(*) AS spins FROM rs_spin WHERE artist_id='${artist.id}'">
+        <entity name="radio" query="SELECT count(*) AS spins FROM RS_Spin WHERE artist_id='${artist.id}'">
           <field column="spins" name="spins"/>
         </entity>
           
@@ -65,12 +69,12 @@
         </entity>
           
   
-        <entity name="snippet" query="SELECT url, license_type, license_version, text FROM rs_biography WHERE artist_id='${artist.id}' limit 1" transformer="script:SnippetTrans">
+        <entity name="snippet" query="SELECT url, license_type, license_version, text FROM RS_Biography WHERE artist_id='${artist.id}' limit 1" transformer="script:SnippetTrans">
         </entity>
       </entity>
       
       <entity name="album" rootEntity="true" transformer="TemplateTransformer"
-        query="SELECT album_id, album_title, album_artist_name, album_artist_id FROM rs_album">
+        query="SELECT album_id, album_title, album_artist_name, album_artist_id FROM RS_Album">
         
         <field column="type" template="album"/>    
         <field column="album_id" name="typeId"/>
@@ -80,7 +84,7 @@
         <field column="album_artist_name" name="secondaryIdentifier"/>
         <field column="identifierText" template="${album.album_title} ${album.album_artist_name}"/>
         
-        <entity name="radio" query="SELECT count(*) AS spins FROM rs_spin WHERE artist_id='${album.album_artist_id}'">
+        <entity name="radio" query="SELECT count(*) AS spins FROM RS_Spin WHERE artist_id='${album.album_artist_id}'">
           <field column="spins" name="spins"/>
         </entity>
       </entity>

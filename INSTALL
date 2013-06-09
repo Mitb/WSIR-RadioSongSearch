@@ -1,4 +1,32 @@
 # please install MySQL, nodejs, java
 
-sudo apt-get install nodejs mysql
+sudo apt-get install nodejs mysql-server
+
+# import required database tables
+
+# EN_Artist
+# EN_Song
+# EN_Biography
+# EN_ForeignSong
+
+# Radio
+# Songs
+# Stations
+
+# Spotify_Album
+# Spotify_AlbumPlaylist
+
+# RS_Bandmember
+
+# create views
+# RS_Artist
+
+# RS_Song
+# RS_Spin
+# RS_Station
+
+# RS_Biography
+# RS_Album
+# RS_Tracklist
+
 
