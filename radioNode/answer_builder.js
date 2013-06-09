@@ -5,8 +5,8 @@ var _ = require('underscore');
 var connection = mysql.createConnection({
   host     	: 'localhost',
   database	: 'Radio',
-  user     	: 'root',
-  password 	: '',
+  user     	: 'search',
+  password 	: 'wsir',
 });
 
 

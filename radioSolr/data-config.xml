@@ -2,8 +2,8 @@
   <dataSource type="JdbcDataSource" 
               driver="com.mysql.jdbc.Driver"
               url="jdbc:mysql://localhost/Radio" 
-              user="root" 
-              password=""/>
+              user="search" 
+              password="wsir"/>
   <document>
     <entity name="song" 
             query="select artist,title from song">
