@@ -11,7 +11,7 @@ app.use(express.static(__dirname + '/application'));
 app.get('/search_results', function(req, res){
 	var urlParts = url.parse(req.url, true);
 	var queryParams = urlParts.query;
-  var query = queryParams.query;
+  var query = encodeURIComponent(queryParams.query);
   var page = queryParams.page ? queryParams.page : 0;
   var numberOfResults = 10;
   console.log('Query: "' + query + '" has been received');
@@ -35,6 +35,7 @@ app.get('/search_results', function(req, res){
     solrResponse.on('end', function () {
       var uiJson = {};
       if(solrData){
+console.log(solrData);
       var solrJson = solrData ? JSON.parse(solrData) : {response:{}};
       var result = {};
       result.hits = solrJson.response.numFound;
