@@ -87,6 +87,10 @@
         <entity name="radio" query="SELECT count(*) AS spins FROM RS_Spin WHERE artist_id='${album.album_artist_id}'">
           <field column="spins" name="spins"/>
         </entity>
+
+        <entity name="snippet" query="SELECT url, license_type, license_version, text FROM RS_Biography WHERE artist_id='${album.album_artist_id}' limit 1" transformer="script:SnippetTrans">
+        </entity>      
+
       </entity>
     </document>
   </dataConfig>
